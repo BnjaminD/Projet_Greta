@@ -1,0 +1,68 @@
+.restaurant-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.restaurant-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 400px; /* Augmentation de la largeur */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    margin-bottom: 30px; /* Ajout d'un espacement en bas */
+}
+
+.restaurant-card:hover {
+    transform: scale(1.05);
+}
+
+.restaurant-image {
+    width: 100%;
+    height: 300px; /* Augmentation de la hauteur de l'image */
+    object-fit: cover;
+}
+
+.restaurant-info {
+    padding: 20px; /* Augmentation du padding */
+}
+
+.restaurant-info h2 {
+    margin-top: 0;
+    font-size: 1.8em; /* Augmentation de la taille du titre */
+    margin-bottom: 15px; /* Ajout d'un espacement sous le titre */
+}
+
+.restaurant-info p {
+    margin: 8px 0; /* Augmentation de l'espacement entre les paragraphes */
+    font-size: 1.1em; /* Légère augmentation de la taille du texte */
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btn-reserver, .btn-menu {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+    max-width: 150px;
+}
+
+.btn-reserver {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-menu {
+    background-color: #2196F3;
+    color: white;
+}

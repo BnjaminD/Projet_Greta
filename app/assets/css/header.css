@@ -1,0 +1,118 @@
+:root {
+    --primary: #00D1FF;
+    --secondary: #6C72FF;
+    --accent: #FF66B2;
+    --background: #0F172A;
+    --text: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --glass: rgba(15, 23, 42, 0.8);
+    --glass-gradient: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
+    --blur: blur(12px);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #1E293B, #0F172A);
+    color: var(--text);
+}
+
+header {
+    background: var(--glass);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.navbar {
+    width: 100%;
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 209, 255, 0.4);
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-menu li a {
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.navbar-menu li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-connexion {
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: none;
+    outline: none;
+}
+
+.btn-connexion:hover {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 209, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--glass);
+        padding: 1rem;
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+}
