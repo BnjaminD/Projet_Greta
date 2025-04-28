@@ -1,6 +1,6 @@
 <?php
 // Database configuration
-define('DB_HOST', 'localhost:8889');  // Port MAMP par défaut
+define('DB_HOST', 'localhost');  // Port MAMP par défaut
 define('DB_NAME', 'Application');      // Nom de la base de données du fichier .sql
 define('DB_CHARSET', 'utf8mb4');
 define('DB_USER', 'root');

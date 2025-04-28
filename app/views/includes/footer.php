@@ -12,8 +12,8 @@
         </div>
         <div class="footer-section">
             <h3>Liens rapides</h3>
-            <a href="index.php">Accueil</a>
-            <a href="restaurants.php">Restaurants</a>
+            <a href="Commandes.php">Accueil</a>
+            <a href="restaurant.php">Restaurants</a>
             <a href="contact.php">Contact</a>
         </div>
     </div>

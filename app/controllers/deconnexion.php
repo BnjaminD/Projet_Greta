@@ -23,7 +23,12 @@ foreach ($allowed_pages as $page) {
 }
 
 // Déconnexion
-deconnexion();
+// Function to handle user deconnexion
+function deconnexion() {
+    // Destroy the session
+    session_unset();
+    session_destroy();
+}deconnexion();
 
 // Ajouter le paramètre showLogin=1 à l'URL de redirection
 $separator = strpos($return_url, '?') !== false ? '&' : '?';

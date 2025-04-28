@@ -57,9 +57,9 @@ if (isset($_GET['inscription']) && $_GET['inscription'] === 'success') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/php/New/app/assets/css/styles.css">
-    <link rel="stylesheet" href="/php/New/app/assets/css/header.css">
-    <link rel="stylesheet" href="/php/New/app/assets/css/footer.css">
+    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/styles.css">
+    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/header.css">
+    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/footer.css">
     <title>Connexion</title>
 </head>
 <body class="connexionV2">
@@ -75,7 +75,7 @@ if (isset($_GET['inscription']) && $_GET['inscription'] === 'success') {
                 <input type="password" name="mot_de_passe" placeholder="Mot de passe" required>
                 <input type="submit" value="Se connecter">
             </form>
-            <p>Pas de compte ? <a href="inscriptionV2.php">Inscrivez-vous</a></p>
+            <p>Pas de compte ? <a href="./inscriptionV2.php">Inscrivez-vous</a></p>
         </div>
     </div>
     <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -3,15 +3,27 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('config.php');
+// Définition des chemins
+define('ROOT_PATH', dirname(__FILE__, 4));  // Remonte de 4 niveaux pour atteindre la racine
+define('APP_PATH', ROOT_PATH . '/app');
+define('CORE_PATH', APP_PATH . '/core');
+
+// Inclusions avec chemins absolus
+require_once CORE_PATH . '/config.php';
+require_once CORE_PATH . '/database.php';
+require_once CORE_PATH . '/functions.php';
+require_once CORE_PATH . '/UserManager.php';
+require_once APP_PATH . '/models/User.php';
 
 use function app\core\{inscriptionUtilisateur};
+
 try {
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-    $test = new PDO($dsn, DB_USER, DB_PASS);
+    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo "Erreur de connexion : " . $e->getMessage();
-    die();
+    error_log("Erreur de connexion : " . $e->getMessage());
+    die('Une erreur est survenue. Veuillez réessayer plus tard.');
 }
 
 require_once ('database.php');

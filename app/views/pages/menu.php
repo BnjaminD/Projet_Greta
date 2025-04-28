@@ -7,34 +7,34 @@ include 'functions.php';
 <html>
 <head>
     <title>Menu</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body class="menu-page">
     <?php
     include 'header.php';
-
-    // Tableau d'association des images pour les plats - mise à jour complète des chemins
+    
+    // Tableau d'association des images pour les plats avec les bons chemins
     $dish_images = [
-        'Steak au Poivre' => './images/dishes/Steak.png',
-        'Coq au Vin' => './images/dishes/Coq_au_vin.png',
-        'Tarte Tatin' => './images/dishes/Tarte_tatin.png',
-        'Salade César' => './images/dishes/Salade_cesar.png',
-        'Boeuf Bourguignon' => './images/dishes/boeuf_bourguignon.png',
-        'Cordon Bleu' => './images/dishes/Cordon_bleu.png',
-        'Saumon en Papillotte' => './images/dishes/Saumon_papillotte.png',
-        'Margherita Pizza' => './images/dishes/pizza.png',
-        'Pizza Quattro Formaggi' => './images/dishes/pizza2.png',
-        'Pizza Pepperoni' => './images/dishes/pizza3.png',
-        'Pâtes Carbonara' => './images/dishes/pasta.png',
-        'Lasagne Bolognaise' => './images/dishes/pasta1.png',
-        'Tiramisu' => './images/dishes/Tiramisu.png',
-        'Sushi Mix' => './images/dishes/sushi.png',
-        'California Roll' => './images/dishes/sushi1.png',
-        'Sashimi Saumon' => './images/dishes/sushi2.png',
-        'Tempura Crevettes' => './images/dishes/Tempura_Crevettes.png',
-        'Ramen Miso' => './images/dishes/Ramen_Miso.png',
-        'Mochi Glacé' => './images/dishes/Mochi_Glace.png',
-        'default' => './images/dishes/default_dish.png'
+        'Steak au Poivre' => '/Projet_Greta/app/assets/img/dishes/Steak.png',
+        'Coq au Vin' => '/Projet_Greta/app/assets/img/dishes/Coq_au_vin.png',
+        'Tarte Tatin' => '/Projet_Greta/app/assets/img/dishes/Tarte_tatin.png',
+        'Salade César' => '/Projet_Greta/app/assets/img/dishes/Salade_cesar.png',
+        'Boeuf Bourguignon' => '/Projet_Greta/app/assets/img/dishes/boeuf_bourguignon.png',
+        'Cordon Bleu' => '/Projet_Greta/app/assets/img/dishes/Cordon_bleu.png',
+        'Saumon en Papillotte' => '/Projet_Greta/app/assets/img/dishes/Saumon_papillotte.png',
+        'Margherita Pizza' => '/Projet_Greta/app/assets/img/dishes/pizza.png',
+        'Pizza Quattro Formaggi' => '/Projet_Greta/app/assets/img/dishes/pizza2.png',
+        'Pizza Pepperoni' => '/Projet_Greta/app/assets/img/dishes/pizza3.png',
+        'Pâtes Carbonara' => '/Projet_Greta/app/assets/img/dishes/pasta.png',
+        'Lasagne Bolognaise' => '/Projet_Greta/app/assets/img/dishes/pasta1.png',
+        'Tiramisu' => '/Projet_Greta/app/assets/img/dishes/Tiramisu.png',
+        'Sushi Mix' => '/Projet_Greta/app/assets/img/dishes/sushi.png',
+        'California Roll' => '/Projet_Greta/app/assets/img/dishes/sushi1.png',
+        'Sashimi Saumon' => '/Projet_Greta/app/assets/img/dishes/sushi2.png',
+        'Tempura Crevettes' => '/Projet_Greta/app/assets/img/dishes/Tempura_Crevettes.png',
+        'Ramen Miso' => '/Projet_Greta/app/assets/img/dishes/Ramen_Miso.png',
+        'Mochi Glacé' => '/Projet_Greta/app/assets/img/dishes/Mochi_Glace.png',
+        'default' => '/Projet_Greta/app/assets/img/dishes/default_dish.png'
     ];
 
     // Récupérer l'ID du restaurant depuis l'URL
@@ -130,16 +130,19 @@ include 'functions.php';
                                 <?php foreach ($dishes as $dish): ?>
                                     <a href="ingredients.php?dish_id=<?= $dish['dish_id'] ?>" class="dish-card">
                                         <?php 
-                                            // Amélioration de la logique de sélection d'image
-                                            $imageUrl = './images/dishes/default_dish.png'; // Image par défaut
-                                            if (isset($dish_images[$dish['name']]) && file_exists(substr($dish_images[$dish['name']], 2))) {
-                                                $imageUrl = $dish_images[$dish['name']];
+                                            // Logique améliorée pour la sélection d'image
+                                            $imageUrl = $dish_images['default']; // Image par défaut
+                                            if (isset($dish_images[$dish['name']])) {
+                                                $fullPath = $_SERVER['DOCUMENT_ROOT'] . $dish_images[$dish['name']];
+                                                if (file_exists($fullPath)) {
+                                                    $imageUrl = $dish_images[$dish['name']];
+                                                }
                                             }
                                         ?>
                                         <img src="<?= htmlspecialchars($imageUrl) ?>" 
-                                             alt="<?= htmlspecialchars($dish['name']) ?>" 
-                                             class="dish-image"
-                                             onerror="this.src='./images/dishes/default_dish.png'">
+                                            alt="<?= htmlspecialchars($dish['name']) ?>" 
+                                            class="dish-image"
+                                            onerror="this.src='<?= htmlspecialchars($dish_images['default']) ?>'">
                                         <div class="dish-info">
                                             <h4><?= htmlspecialchars($dish['name']) ?></h4>
                                             <p class="dish-description"><?= htmlspecialchars($dish['description']) ?></p>
