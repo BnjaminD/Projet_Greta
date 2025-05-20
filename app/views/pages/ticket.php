@@ -5,7 +5,13 @@ session_start();
 require_once dirname(__DIR__, 2) . '/core/Database.php';
 require_once dirname(__DIR__, 2) . '/core/functions.php';
 require_once dirname(__DIR__, 2) . '/controllers/TicketController.php';
-require_once __DIR__ . '/TicketView.php';
+// Vérifier si ce fichier existe dans le même répertoire
+if (file_exists(__DIR__ . '/TicketView.php')) {
+    require_once __DIR__ . '/TicketView.php';
+} else {
+    // Chemin alternatif si le premier ne fonctionne pas
+    require_once dirname(__DIR__, 2) . '/views/pages/TicketView.php';
+}
 require_once dirname(__DIR__, 2) . '/models/Comment.php';
 
 // Utiliser le namespace approprié

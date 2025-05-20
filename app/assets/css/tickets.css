@@ -1,249 +1,287 @@
-/* Styles spécifiques uniquement aux tickets - isolation stricte */
+/* Ticket Management Styles - Harmonisé avec le style du site */
 
-/* Reset seulement pour le conteneur des tickets */
 .tickets-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
     padding: 30px;
-    font-family: inherit;
-    line-height: normal;
+    margin: 20px auto;
+    max-width: 1400px;
 }
 
-/* En-tête de la section tickets uniquement */
-.tickets-container > .tickets-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.tickets-header {
     margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e5e7eb;
+    text-align: center;
 }
 
-.tickets-container > .tickets-header > h1 {
-    font-size: 24px;
-    color: #1a1f36;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    font-weight: 600;
-    text-transform: none;
-}
-
-/* Filtres des tickets */
-.tickets-container .tickets-filters {
-    display: flex;
-    gap: 15px;
+.tickets-header h1 {
+    color: #333;
+    font-size: 28px;
     margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 15px;
 }
 
-/* Style des boutons de filtre UNIQUEMENT dans le conteneur de tickets */
-.tickets-container .tickets-filters .filter-btn {
-    padding: 8px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    background: white;
-    color: #4b5563;
-    cursor: pointer;
-    transition: all 0.2s;
+/* Utilisation du même style de soulignement que dans styles.css */
+.tickets-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #4a6cf7, #2651e9);
+    border-radius: 2px;
 }
 
-.tickets-container .tickets-filters .filter-btn.active {
-    background: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
+.tickets-header h1 i {
+    margin-right: 10px;
+    color: #4a6cf7; /* Couleur principale du site */
 }
 
-/* Grille de tickets */
-.tickets-container > .tickets-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+.tickets-filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-/* Style de cartes de tickets - isolation stricte pour éviter les conflits */
-.tickets-container > .tickets-grid > .ticket-card {
-    background: white;
-    border: 1px solid #e5e7eb;
+.filter-btn {
+    background-color: #f5f7fa;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 20px;
-    transition: all 0.2s;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #555;
+    font-weight: 600;
 }
 
-.tickets-container > .tickets-grid > .ticket-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+.filter-btn:hover {
+    background-color: #eaeaea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-/* Isolation stricte pour tous les éléments intérieurs aux cartes */
-.tickets-container .ticket-header {
+/* Utiliser le même style de gradient que les boutons principaux */
+.filter-btn.active {
+    background: #4a6cf7;
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 3px 10px rgba(74, 108, 247, 0.3);
+}
+
+.tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.ticket-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-header {
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
 }
 
-.tickets-container .ticket-id {
-    font-size: 14px;
-    color: #6b7280;
+.ticket-id {
+    font-weight: bold;
+    color: #555;
 }
 
-.tickets-container .ticket-status {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    background: #f3f4f6;
-}
-
-/* Style spécifique pour chaque statut */
-.tickets-container .ticket-pending .ticket-status {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-.tickets-container .ticket-in-progress .ticket-status {
-    background: #eff6ff;
-    color: #1d4ed8;
-}
-
-.tickets-container .ticket-completed .ticket-status {
-    background: #f0fdf4;
-    color: #15803d;
-}
-
-/* Corps de la carte */
-.tickets-container .ticket-body {
-    margin-bottom: 20px;
-}
-
-.tickets-container .ticket-restaurant {
-    font-size: 18px;
+.ticket-status {
     font-weight: 600;
-    margin-bottom: 10px;
-    color: #1a1f36;
+    font-size: 14px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: white;
 }
 
-.tickets-container .ticket-user, 
-.tickets-container .ticket-date {
+.ticket-body {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.ticket-restaurant {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.ticket-user {
     font-size: 14px;
-    color: #6b7280;
+    color: #666;
     margin-bottom: 5px;
 }
 
-.tickets-container .ticket-content {
-    margin: 15px 0;
-    line-height: 1.5;
-    color: #4b5563;
+.ticket-date {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 15px;
 }
 
-/* Étoiles de notation */
-.tickets-container .ticket-rating {
-    display: flex;
-    gap: 5px;
+.ticket-content {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ddd;
+    color: #333; /* Ajout de la couleur noire explicite pour le texte */
+}
+
+.ticket-rating {
     margin-top: 10px;
 }
 
-.tickets-container .ticket-rating .fa-star {
-    color: #d1d5db;
+/* Utiliser la même couleur d'étoile que dans styles.css */
+.ticket-rating .fa-star {
+    color: #ddd;
+    font-size: 16px;
 }
 
-.tickets-container .ticket-rating .fa-star.active {
-    color: #f59e0b;
+.ticket-rating .fa-star.active {
+    color: #4a6cf7;
 }
 
-/* Actions sur tickets - isolation stricte */
-.tickets-container .ticket-actions {
+.ticket-actions {
+    padding: 15px;
     display: flex;
-    flex-wrap: wrap;
     gap: 10px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
 }
 
-/* Style UNIQUEMENT pour les boutons d'action dans les tickets */
-.tickets-container .ticket-actions .btn-action {
-    padding: 8px 16px;
-    border-radius: 6px;
+.btn-action {
     font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 8px;
     border: none;
-    transition: all 0.2s;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Couleurs harmonisées avec le reste du site */
+.btn-action.validate {
+    background: #43a047; /* Vert */
     color: white;
 }
 
-.tickets-container .ticket-actions .btn-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.btn-action.progress {
+    background: #4a6cf7; /* Bleu principal du site */
+    color: white;
 }
 
-/* Boutons d'action spécifiques */
-.tickets-container .ticket-actions .validate {
-    background: #10b981;
+.btn-action.complete {
+    background: #00796b; /* Vert-bleu */
+    color: white;
 }
 
-.tickets-container .ticket-actions .validate:hover {
-    background: #059669;
+.btn-action.delete {
+    background: #f44336; /* Rouge */
+    color: white;
 }
 
-.tickets-container .ticket-actions .progress {
-    background: #3b82f6;
+/* Utilisation des gradients comme dans styles.css */
+.ticket-pending .ticket-status {
+    background: linear-gradient(135deg, #ffb74d, #f57c00);
 }
 
-.tickets-container .ticket-actions .progress:hover {
-    background: #2563eb;
+.ticket-in-progress .ticket-status {
+    background: linear-gradient(135deg, #64b5f6, #4a6cf7);
 }
 
-.tickets-container .ticket-actions .complete {
-    background: #8b5cf6;
+.ticket-completed .ticket-status {
+    background: linear-gradient(135deg, #81c784, #43a047);
 }
 
-.tickets-container .ticket-actions .complete:hover {
-    background: #7c3aed;
+.ticket-pending .ticket-content {
+    border-left-color: #f57c00;
 }
 
-.tickets-container .ticket-actions .delete {
-    background: #ef4444;
+.ticket-in-progress .ticket-content {
+    border-left-color: #4a6cf7;
 }
 
-.tickets-container .ticket-actions .delete:hover {
-    background: #dc2626;
+.ticket-completed .ticket-content {
+    border-left-color: #43a047;
 }
 
-/* Message quand il n'y a pas de tickets */
-.tickets-container > .no-tickets {
+.no-tickets {
     text-align: center;
-    padding: 40px;
-    color: #6b7280;
-    font-size: 18px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    color: #888;
+    font-style: italic;
+    grid-column: 1 / -1;
 }
 
-/* Media queries avec isolation stricte */
-@media (max-width: 768px) {
-    .tickets-container > .tickets-header {
-        flex-direction: column;
-        align-items: flex-start;
+/* Responsive Design */
+@media (max-width: 992px) {
+    .tickets-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
-    
-    .tickets-container .tickets-filters {
-        margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    .tickets-filters {
         flex-wrap: wrap;
     }
     
-    .tickets-container .ticket-actions {
-        flex-direction: column;
+    .filter-btn {
+        flex: 1;
+        min-width: 120px;
     }
     
-    .tickets-container .ticket-actions .btn-action {
-        width: 100%;
-    }
-    
-    .tickets-container > .tickets-grid {
+    .tickets-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .ticket-card {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .tickets-container {
+        padding: 15px;
+    }
+    
+    .tickets-header h1 {
+        font-size: 24px;
+    }
+    
+    .ticket-actions {
+        flex-direction: column;
     }
 }

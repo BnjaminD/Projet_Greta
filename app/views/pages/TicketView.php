@@ -11,8 +11,14 @@ class TicketView {
         // Correction du chemin pour inclure le header
         include dirname(__DIR__) . '/includes/header.php';
         
-        // Add the ticket-specific CSS
-        echo '<link rel="stylesheet" href="/app/assets/css/tickets.css">';
+        // Add admin-tickets class to body
+        echo '<script>document.addEventListener("DOMContentLoaded", function() { document.body.classList.add("admin-tickets"); });</script>';
+        
+        // Use main CSS file instead of specific ticket CSS
+        // This avoids 404 errors if the tickets.css file doesn't exist
+        echo '<style>';
+        include dirname(__DIR__, 2) . '/assets/css/tickets.css';
+        echo '</style>';
         
         echo '<div class="tickets-container">';
         echo '<div class="tickets-header">';

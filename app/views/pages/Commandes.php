@@ -117,8 +117,6 @@ if ($isAdmin) {
                             <?php if ($isAdmin): ?><td><?= htmlspecialchars($order['user_email']) ?></td><?php endif; ?>
                             <td><?= date('d/m/Y H:i', strtotime($order['ordered_at'])) ?></td>
                             <td>
-                                <!-- Ajoutez une ligne de débogage -->
-                                <small style="display:block; color:#999; font-size:10px;">Class: status-<?= strtolower($order['status']) ?></small>
                                 <span class="status-badge status-<?= strtolower($order['status']) ?>">
                                     <?= htmlspecialchars($order['status']) ?>
                                 </span>
