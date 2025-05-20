@@ -1,125 +1,168 @@
 <?php
+/**
+ * Fichier de redirection - Les fonctions ont été déplacées vers app/core/functions.php
+ * Ce fichier existe uniquement pour maintenir la compatibilité avec le code existant
+ */
+
 namespace app\views\includes;
 
-use PDO;
-use app\core\Database;
+// Importation des fonctions du namespace core
+use app\core;
+use function app\core\sanitize;
+use function app\core\connexionUtilisateur;
+use function app\core\updateFailedLoginAttempts;
+use function app\core\resetFailedLoginAttempts;
+use function app\core\updateLastLogin;
+use function app\core\logUserActivity;
+use function app\core\isAdmin;
+use function app\core\getUserById;
+use function app\core\createUser;
+use function app\core\updateUser;
+use function app\core\getRestaurants;
+use function app\core\createReservation;
+use function app\core\getRestaurantMenu;
+use function app\core\logSystemError;
+use function app\core\paginate;
 
-require_once __DIR__ . '/../../core/Database.php';
-require_once __DIR__ . '/../../core/config.php';
+// Inclure le nouveau fichier de fonctions
+require_once __DIR__ . '/../../core/functions.php';
 
+/**
+ * Classe de compatibilité - Redirige les appels statiques vers les fonctions globales
+ */
 class Functions {
-    private static ?Database $db = null;
+    private static ?\app\core\Database $db = null;
 
     /**
      * Initialise la connexion à la base de données
      */
     public static function init(): void {
         if (self::$db === null) {
-            self::$db = Database::getInstance();
+            self::$db = \app\core\Database::getInstance();
         }
     }
 
-     /**
-     * Insert des données dans une table
-     * @param string $table Nom de la table
-     * @param array $data Données à insérer
-     * @return int ID de l'enregistrement inséré
-     * @throws \InvalidArgumentException Si les données sont invalides
+    /**
+     * Redirige l'appel à insert vers la fonction globale ou la méthode de Database
      */
     public static function insert(string $table, array $data): int {
         self::init();
-        
-        try {
-            // Validation des données
-            if (empty($table) || empty($data)) {
-                throw new \InvalidArgumentException('Table ou données manquantes');
-            }
-
-            // Validation du nom de table (protection injection SQL)
-            if (!preg_match('/^[a-zA-Z0-9_]+$/', $table)) {
-                throw new \InvalidArgumentException('Nom de table invalide');
-            }
-
-            // Validation des clés du tableau
-            foreach (array_keys($data) as $column) {
-                if (!preg_match('/^[a-zA-Z0-9_]+$/', $column)) {
-                    throw new \InvalidArgumentException('Nom de colonne invalide: ' . $column);
-                }
-            }
-
-            // Insertion via Database avec les données validées
-            return self::$db->insert($table, $data);
-
-        } catch (\Exception $e) {
-            error_log("Erreur d'insertion: " . $e->getMessage());
-            throw $e;
-        }
+        return self::$db->insert($table, $data);
     }
-
+    
     /**
-     * Récupère les réservations avec protection XSS
+     * Redirige l'appel à update vers la méthode de Database
      */
-    public static function getReservations(): array {
+    public static function update(string $table, array $data, string $where, array $whereParams = []): int {
         self::init();
-        $sql = "SELECT id, user_id, status FROM reservations";
-        return self::$db->fetchAll($sql);
+        return self::$db->update($table, $data, $where, $whereParams);
     }
-
+    
     /**
-     * Inscription utilisateur sécurisée
+     * Redirige l'appel à fetchOne vers la méthode de Database
      */
-    public static function inscriptionUtilisateur(string $username, string $email, string $password): array {
+    public static function fetchOne($sql, array $params = []): ?array {
         self::init();
-        
-        try {
-            // Validation
-            if (!self::validateUserData($username, $email, $password)) {
-                throw new \InvalidArgumentException('Données invalides');
-            }
-
-            // Hash du mot de passe
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            // Préparation des données
-            $userData = [
-                'username' => $username,
-                'email' => $email,
-                'password' => $hashedPassword,
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-
-            // Insertion sécurisée
-            $userId = self::$db->insert('user', $userData);
-
-            return [
-                'success' => true,
-                'user_id' => $userId,
-                'message' => 'Inscription réussie'
-            ];
-
-        } catch (\Exception $e) {
-            error_log("Erreur d'inscription: " . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Erreur lors de l\'inscription'
-            ];
-        }
+        return self::$db->fetchOne($sql, $params);
     }
-
+    
     /**
-     * Validation des données utilisateur
+     * Redirige l'appel à fetchAll vers la méthode de Database
      */
-    private static function validateUserData(string $username, string $email, string $password): bool {
-        return !empty($username) 
-            && strlen($username) >= 3 
-            && filter_var($email, FILTER_VALIDATE_EMAIL) 
-            && strlen($password) >= 8;
+    public static function fetchAll($sql, array $params = []): array {
+        self::init();
+        return self::$db->fetchAll($sql, $params);
     }
-}
-
-// Utilisation
-try {
-    Functions::init();
-} catch (\Exception $e) {
-    die('Erreur d\'initialisation: ' . $e->getMessage());
+    
+    /**
+     * Redirige l'appel à execute vers la méthode de Database
+     */
+    public static function execute($sql, array $params = []) {
+        self::init();
+        return self::$db->execute($sql, $params);
+    }
+    
+    /**
+     * Redirige vers la fonction sanitize
+     */
+    public static function sanitize($data) {
+        return sanitize($data);
+    }
+    
+    /**
+     * Redirige vers la fonction connexionUtilisateur
+     */
+    public static function connexionUtilisateur($username, $password) {
+        return connexionUtilisateur($username, $password);
+    }
+    
+    /**
+     * Redirige vers la fonction isAdmin
+     */
+    public static function isAdmin($userId) {
+        return isAdmin($userId);
+    }
+    
+    /**
+     * Redirige vers la fonction getUserById
+     */
+    public static function getUserById($userId) {
+        return getUserById($userId);
+    }
+    
+    /**
+     * Redirige vers la fonction createUser
+     */
+    public static function createUser($username, $email, $password, $role = 'user') {
+        return createUser($username, $email, $password, $role);
+    }
+    
+    /**
+     * Redirige vers la fonction updateUser
+     */
+    public static function updateUser($userId, $data) {
+        return updateUser($userId, $data);
+    }
+    
+    /**
+     * Redirige vers la fonction getRestaurants
+     */
+    public static function getRestaurants($limit = null, $offset = 0, $filters = []) {
+        return getRestaurants($limit, $offset, $filters);
+    }
+    
+    /**
+     * Redirige vers la fonction createReservation
+     */
+    public static function createReservation($userId, $restaurantId, $reservationTime, $numberOfGuests, $specialRequests = null) {
+        return createReservation($userId, $restaurantId, $reservationTime, $numberOfGuests, $specialRequests);
+    }
+    
+    /**
+     * Redirige vers la fonction getRestaurantMenu
+     */
+    public static function getRestaurantMenu($restaurantId) {
+        return getRestaurantMenu($restaurantId);
+    }
+    
+    /**
+     * Redirige vers la fonction logUserActivity
+     */
+    public static function logUserActivity($userId, $action, $details = null) {
+        return logUserActivity($userId, $action, $details);
+    }
+    
+    /**
+     * Redirige vers la fonction logSystemError
+     */
+    public static function logSystemError($message, $severity = 'ERROR', $context = null) {
+        return logSystemError($message, $severity, $context);
+    }
+    
+    /**
+     * Redirige vers la fonction paginate
+     */
+    public static function paginate($total, $limit, $currentPage) {
+        return paginate($total, $limit, $currentPage);
+    }
 }

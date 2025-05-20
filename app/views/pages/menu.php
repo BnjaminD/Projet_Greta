@@ -7,7 +7,7 @@ include 'functions.php';
 <html>
 <head>
     <title>Menu</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
 </head>
 <body class="menu-page">
     <?php
@@ -15,26 +15,26 @@ include 'functions.php';
     
     // Tableau d'association des images pour les plats avec les bons chemins
     $dish_images = [
-        'Steak au Poivre' => '/Projet_Greta/app/assets/img/dishes/Steak.png',
-        'Coq au Vin' => '/Projet_Greta/app/assets/img/dishes/Coq_au_vin.png',
-        'Tarte Tatin' => '/Projet_Greta/app/assets/img/dishes/Tarte_tatin.png',
-        'Salade César' => '/Projet_Greta/app/assets/img/dishes/Salade_cesar.png',
-        'Boeuf Bourguignon' => '/Projet_Greta/app/assets/img/dishes/boeuf_bourguignon.png',
-        'Cordon Bleu' => '/Projet_Greta/app/assets/img/dishes/Cordon_bleu.png',
-        'Saumon en Papillotte' => '/Projet_Greta/app/assets/img/dishes/Saumon_papillotte.png',
-        'Margherita Pizza' => '/Projet_Greta/app/assets/img/dishes/pizza.png',
-        'Pizza Quattro Formaggi' => '/Projet_Greta/app/assets/img/dishes/pizza2.png',
-        'Pizza Pepperoni' => '/Projet_Greta/app/assets/img/dishes/pizza3.png',
-        'Pâtes Carbonara' => '/Projet_Greta/app/assets/img/dishes/pasta.png',
-        'Lasagne Bolognaise' => '/Projet_Greta/app/assets/img/dishes/pasta1.png',
-        'Tiramisu' => '/Projet_Greta/app/assets/img/dishes/Tiramisu.png',
-        'Sushi Mix' => '/Projet_Greta/app/assets/img/dishes/sushi.png',
-        'California Roll' => '/Projet_Greta/app/assets/img/dishes/sushi1.png',
-        'Sashimi Saumon' => '/Projet_Greta/app/assets/img/dishes/sushi2.png',
-        'Tempura Crevettes' => '/Projet_Greta/app/assets/img/dishes/Tempura_Crevettes.png',
-        'Ramen Miso' => '/Projet_Greta/app/assets/img/dishes/Ramen_Miso.png',
-        'Mochi Glacé' => '/Projet_Greta/app/assets/img/dishes/Mochi_Glace.png',
-        'default' => '/Projet_Greta/app/assets/img/dishes/default_dish.png'
+        'Steak au Poivre' => '/assets/img/dishes/Steak.png',
+        'Coq au Vin' => '/assets/img/dishes/Coq_au_vin.png',
+        'Tarte Tatin' => '/assets/img/dishes/Tarte_tatin.png',
+        'Salade César' => '/app/assets/img/dishes/Salade_cesar.png',
+        'Boeuf Bourguignon' => '/assets/img/dishes/boeuf_bourguignon.png',
+        'Cordon Bleu' => '/assets/img/dishes/Cordon_bleu.png',
+        'Saumon en Papillotte' => '/assets/img/dishes/Saumon_papillotte.png',
+        'Margherita Pizza' => '/assets/img/dishes/pizza.png',
+        'Pizza Quattro Formaggi' => '/assets/img/dishes/pizza2.png',
+        'Pizza Pepperoni' => '/assets/img/dishes/pizza3.png',
+        'Pâtes Carbonara' => '/assets/img/dishes/pasta.png',
+        'Lasagne Bolognaise' => '/assets/img/dishes/pasta1.png',
+        'Tiramisu' => '/assets/img/dishes/Tiramisu.png',
+        'Sushi Mix' => '/assets/img/dishes/sushi.png',
+        'California Roll' => '/assets/img/dishes/sushi1.png',
+        'Sashimi Saumon' => '/assets/img/dishes/sushi2.png',
+        'Tempura Crevettes' => '/assets/img/dishes/Tempura_Crevettes.png',
+        'Ramen Miso' => '/assets/img/dishes/Ramen_Miso.png',
+        'Mochi Glacé' => '/assets/img/dishes/Mochi_Glace.png',
+        'default' => '/assets/img/dishes/default_dish.png'
     ];
 
     // Récupérer l'ID du restaurant depuis l'URL

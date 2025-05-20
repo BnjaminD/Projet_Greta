@@ -18,8 +18,8 @@
                 <p><i class="fas fa-utensils"></i> Cuisine: <?= htmlspecialchars($restaurant->getCuisineType()) ?></p>
             </div>
             <div class="actions">
-                <a href="reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-primary">Réserver</a>
-                <a href="menu.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-secondary">Voir le menu</a>
+                <a href="../reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-primary">Réserver</a>
+                <a href="../menu.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-secondary">Voir le menu</a>
             </div>
         </div>
     </div>

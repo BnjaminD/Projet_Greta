@@ -1,6 +1,8 @@
 <?php
 namespace app\models;
 
+use app\core\Database;
+
 class User {
     private $id;
     private $username;
@@ -37,4 +39,19 @@ class User {
     public function setPassword($password): void { $this->password = $password; }
     public function setRole($role): void { $this->role = $role; }
     public function setCreatedAt($createdAt): void { $this->createdAt = $createdAt; }
+
+    /**
+     * Récupère les informations de l'utilisateur courant
+     * @param int $userId ID de l'utilisateur
+     * @return array|null Informations sur l'utilisateur ou null si non trouvé
+     */
+    public function getCurrentUser($userId) {
+        $db = Database::getInstance();
+        $sql = "SELECT u.*, r.role_name 
+                FROM user u 
+                LEFT JOIN user_roles r ON u.user_id = r.user_id 
+                WHERE u.user_id = ?";
+        
+        return $db->fetchOne($sql, [$userId]);
+    }
 }

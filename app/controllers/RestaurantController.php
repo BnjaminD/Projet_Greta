@@ -5,13 +5,13 @@ use App\Models\Restaurant;
 
 class RestaurantController extends AbstractController {
     private const RESTAURANT_IMAGES = [
-        'The Fancy Fork' => './images/restaurant/fancy_fork.png',
-        'Pizza Paradise' => './images/restaurant/pizza_paradise.png',
-        'Sushi World' => './images/restaurant/sushi_world.png',
-        'Le Bistrot Parisien' => './images/restaurant/bistrot_parisien.png',
-        'Taj Mahal' => './images/restaurant/taj_mahal.png',
-        'El Tapas' => './images/restaurant/el_tapas.png',
-        'default' => './images/restaurant/default_restaurant.png'
+        'The Fancy Fork' => '../images/restaurant/fancy_fork.png',
+        'Pizza Paradise' => '../images/restaurant/pizza_paradise.png',
+        'Sushi World' => '../images/restaurant/sushi_world.png',
+        'Le Bistrot Parisien' => '../images/restaurant/bistrot_parisien.png',
+        'Taj Mahal' => '../images/restaurant/taj_mahal.png',
+        'El Tapas' => '../images/restaurant/el_tapas.png',
+        'default' => '../images/restaurant/default_restaurant.png'
     ];
 
     protected PDO $pdo;
@@ -23,7 +23,7 @@ class RestaurantController extends AbstractController {
 
     public function index(): void {
         $restaurants = $this->findAll();
-        $this->render('restaurant/index', [
+        $this->render('../restaurant/index', [
             'restaurants' => $restaurants,
             'images' => self::RESTAURANT_IMAGES
         ]);
@@ -33,7 +33,7 @@ class RestaurantController extends AbstractController {
         $restaurant = $this->findById($id);
         if (!$restaurant) {
             // Gérer l'erreur
-            header('Location: /restaurants');
+            header('Location: ../restaurants');
             return;
         }
         

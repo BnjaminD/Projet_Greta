@@ -24,10 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         $user = connexionUtilisateur($username, $mot_de_passe);
         
-        if ($user && isset($user['id'])) {
-            error_log("DEBUG: Connexion réussie - ID: " . $user['id']);
+        // Le problème est ici - vérifier user_id, pas id
+        if ($user && isset($user['user_id'])) {
+            error_log("DEBUG: Connexion réussie - ID: " . $user['user_id']);
             
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['logged_in'] = true;
             $_SESSION['role'] = $user['role'];
@@ -37,10 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Redirection selon le rôle
             if ($user['role'] === 'admin') {
                 header("Location: Commandes.php");
+                exit();
             } else {
                 header("Location: espace_personnel.php");
+                exit();
             }
-            exit();
         } else {
             $message = "Identifiants incorrects ou compte inactif";
         }
@@ -57,13 +59,11 @@ if (isset($_GET['inscription']) && $_GET['inscription'] === 'success') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/styles.css">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/header.css">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
     <title>Connexion</title>
 </head>
 <body class="connexionV2">
-    <?php require_once __DIR__ . '/../includes/header.php'; ?>
+    <?php require_once __DIR__ . '../../includes/header.php'; ?>
     <div class="container">
         <div class="form-container">
             <h1>Connexion</h1>
@@ -75,9 +75,9 @@ if (isset($_GET['inscription']) && $_GET['inscription'] === 'success') {
                 <input type="password" name="mot_de_passe" placeholder="Mot de passe" required>
                 <input type="submit" value="Se connecter">
             </form>
-            <p>Pas de compte ? <a href="./inscriptionV2.php">Inscrivez-vous</a></p>
+            <p>Pas de compte ? <a href="../pages/inscriptionV2.php">Inscrivez-vous</a></p>
         </div>
     </div>
-    <?php require_once __DIR__ . '/../includes/footer.php'; ?>
+    <?php require_once __DIR__ . '../../includes/footer.php'; ?>
 </body>
 </html>

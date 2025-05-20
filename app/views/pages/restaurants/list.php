@@ -16,9 +16,9 @@
                     <p><strong>Note:</strong> <?= $restaurant->getRating() ?>/5</p>
                 </div>
                 <div class="restaurant-card__actions">
-                    <a href="restaurant.php?id=<?= $restaurant->getId() ?>" 
+                    <a href="../restaurant.php?id=<?= $restaurant->getId() ?>" 
                        class="btn btn-secondary">Voir détails</a>
-                    <a href="reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" 
+                    <a href="../reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" 
                        class="btn btn-primary">Réserver</a>
                 </div>
             </div>

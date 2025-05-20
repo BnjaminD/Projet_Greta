@@ -1,17 +1,26 @@
 <?php
-require_once 'config.php';
-require_once 'functions.php';
-require_once 'database.php';
+// Correction des chemins d'inclusion
+require_once dirname(__DIR__, 2) . '/core/Database.php';
+require_once dirname(__DIR__, 2) . '/core/functions.php';
+
+// Utiliser les namespaces appropriés
+use app\core\Database;
 
 // Vérification de la session admin
 session_start();
+
+// Fonction pour vérifier si l'utilisateur est admin
+function isAdmin() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+}
+
 if (!isAdmin()) {
     header('Location: connexionV2.php');
     exit();
 }
 
 try {
-    $pdo = Database::getInstance()->getConnection();
+    $db = Database::getInstance();
 
     // Requête pour récupérer l'historique des activités avec les détails utilisateur
     $query = "SELECT 
@@ -26,18 +35,21 @@ try {
               ORDER BY ual.performed_at DESC
               LIMIT 100"; // Limitez à 100 entrées pour la performance
               
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $activities = $db->fetchAll($query);
 
     // Ajout d'un log pour le débogage
     if (count($activities) === 0) {
         error_log("Aucune activité trouvée dans la base de données");
     }
 
-} catch(PDOException $e) {
+} catch(\Exception $e) {
     error_log("Erreur de monitoring : " . $e->getMessage());
     die("Une erreur est survenue. Veuillez réessayer plus tard.");
+}
+
+// Fonction pour sécuriser les données affichées
+function sanitize($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
 ?>
 
@@ -47,10 +59,10 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoring des Activités Utilisateurs</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
 </head>
 <body class="admin-monitoring">
-    <?php include 'header.php'; ?>
+    <?php include dirname(__DIR__) . '/includes/header.php'; ?>
     
     <main class="container">
         <h1>Historique des Activités Utilisateurs</h1>
@@ -100,7 +112,7 @@ try {
         </table>
     </main>
     
-    <?php include 'footer.php'; ?>
+    <?php include dirname(__DIR__) . '/includes/footer.php'; ?>
     
     <script>
         // Filtrage des activités

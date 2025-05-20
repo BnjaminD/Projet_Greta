@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/Projet_Greta/app/assets/css/header.css">
-    <title>Restaurants</title>
+    <title><?= $pageTitle ?? 'Application Restaurant' ?></title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
+<body class="<?= $bodyClass ?? '' ?>">
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <a href="/Projet_Greta/app/views/pages/Commandes.php" class="navbar-brand">
-                    <span>RestaurantApp</span>
-                </a>
+                <a href="../pages/accueil.php" class="navbar-brand">Restaurant App</a>
                 <ul class="navbar-menu">
-                    <li><a href="/Projet_Greta/app/views/pages/restaurant.php">Restaurants</a></li>
-                    <li><a href="/Projet_Greta/app/views/pages/contact.php">Contact</a></li>
+                    <li><a href="../pages/accueil.php">Accueil</a></li>
+                    <li><a href="../pages/restaurant.php">Restaurants</a></li>
                     <?php if (isset($_SESSION['user_id'])): ?>
+                        <li><a href="../pages/mon_compte.php">Mon Compte</a></li>
+                        <li><a href="../pages/TicketView.php">Tickets</a></li>
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                            <li><a href="/Projet_Greta/app/views/pages/monitoring.php">Monitoring</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/ticket.php">Tickets</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/Commandes.php">Commandes</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/mon_compte.php">Mon Compte</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/deconnexion.php?return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Déconnexion</a></li>
-                        <?php else: ?>
-                            <li><a href="/Projet_Greta/app/views/pages/espace_personnel.php">Mes Réservations</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/mon_compte.php">Mon Compte</a></li>
-                            <li><a href="/Projet_Greta/app/views/pages/deconnexion.php?return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Déconnexion</a></li>
+                            <li><a href="../pages/monitoring.php">Admin</a></li>
                         <?php endif; ?>
+                        <li><a href="../../controllers/deconnexion.php">Déconnexion</a></li>
                     <?php else: ?>
-                        <li><a href="/Projet_Greta/app/views/pages/connexionV2.php" class="btn-connexion <?php echo isset($_GET['showLogin']) ? 'highlight' : ''; ?>">Se Connecter</a></li>
+                        <li><a href="../pages/connexionV2.php">Connexion</a></li>
+                        <li><a href="../pages/inscriptionV2.php">Inscription</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
         </nav>
     </header>
-    <main>
+    
+    <?php if (isset($_GET['message'])): ?>
+        <div class="alert alert-<?= $_GET['type'] ?? 'info' ?>">
+            <?= htmlspecialchars($_GET['message']) ?>
+        </div>
+    <?php endif; ?>

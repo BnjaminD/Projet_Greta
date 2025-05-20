@@ -42,6 +42,10 @@ class Database {
         if (is_array($data)) {
             return array_map([$this, 'sanitize'], $data);
         }
+        // Ajouter une vérification pour les valeurs NULL
+        if ($data === null) {
+            return null;
+        }
         return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
     }
 

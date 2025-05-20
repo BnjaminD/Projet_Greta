@@ -1,31 +1,12 @@
 <?php
 session_start();
-require_once ('database.php');
-require_once ('functions.php');
+// Correction des chemins de fichiers
+require_once dirname(__DIR__, 3) . '/autoload.php';
+// Directement inclure le fichier functions.php
+require_once dirname(__DIR__, 2) . '/core/functions.php';
 
-// Define the getDB function if not already defined
-if (!function_exists('getDB')) {
-    function getDB() {
-        $host = '127.0.0.1';
-        $db = 'your_database_name';
-        $user = 'your_database_user';
-        $pass = 'your_database_password';
-        $charset = 'utf8mb4';
-
-        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-        $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ];
-
-        try {
-            return new PDO($dsn, $user, $pass, $options);
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), (int)$e->getCode());
-        }
-    }
-}
+// Utiliser les classes et fonctions du core avec l'espace de noms correct
+use app\core\Database;
 
 // Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -37,11 +18,12 @@ $user_id = $_SESSION['user_id'];
 $success_message = '';
 $error_message = '';
 
+// Obtenir une instance de la base de données
+$db = Database::getInstance();
+
 // Traitement du formulaire de mise à jour
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $pdo = getDB();
-
         // Traitement de la photo de profil
         if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
             $allowed = ['jpg', 'jpeg', 'png', 'gif'];
@@ -55,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file)) {
                     // On stocke juste le nom du fichier dans la base de données
-                    $stmt = $pdo->prepare("UPDATE user SET profile_picture_url = ? WHERE user_id = ?");
+                    $stmt = $db->prepare("UPDATE user SET profile_picture_url = ? WHERE user_id = ?");
                     $stmt->execute([$new_filename, $user_id]);
                     $success_message = "Photo de profil mise à jour avec succès";
                 } else {
@@ -80,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $new_password = $_POST['new_password'] ?? '';
                     $confirm_password = $_POST['confirm_password'] ?? '';
 
-                    $stmt = $pdo->prepare("SELECT password_hash FROM user WHERE user_id = ?");
+                    $stmt = $db->prepare("SELECT password_hash FROM user WHERE user_id = ?");
                     $stmt->execute([$user_id]);
                     $user = $stmt->fetch();
                     
@@ -88,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!empty($new_password) && !empty($confirm_password)) {
                             if ($new_password === $confirm_password) {
                                 $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
-                                $stmt = $pdo->prepare("UPDATE user SET password_hash = ? WHERE user_id = ?");
+                                $stmt = $db->prepare("UPDATE user SET password_hash = ? WHERE user_id = ?");
                                 $stmt->execute([$password_hash, $user_id]);
                                 $success_message = "Mot de passe mis à jour avec succès";
                             } else {
@@ -102,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Mise à jour des informations du profil
                 if (empty($error_message)) {
-                    $stmt = $pdo->prepare("UPDATE user SET username = ?, email = ?, bio = ? WHERE user_id = ?");
+                    $stmt = $db->prepare("UPDATE user SET username = ?, email = ?, bio = ? WHERE user_id = ?");
                     if ($stmt->execute([$username, $email, $bio, $user_id])) {
                         $success_message = "Profil mis à jour avec succès";
                     }
@@ -110,18 +92,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-    } catch (PDOException $e) {
+    } catch (\PDOException $e) {
         $error_message = "Erreur lors de la mise à jour du profil: " . $e->getMessage();
     }
 }
 
 // Récupération des informations actuelles de l'utilisateur
 try {
-    $pdo = getDB();
-    $stmt = $pdo->prepare("SELECT * FROM user WHERE user_id = ?");
+    $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
     $stmt->execute([$user_id]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+    $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+} catch (\PDOException $e) {
     $error_message = "Erreur lors de la récupération des informations";
 }
 ?>
@@ -174,55 +155,4 @@ try {
             <!-- Section Photo de profil -->
             <form method="POST" enctype="multipart/form-data" class="account-form">
                 <h2>Photo de profil</h2>
-                <div class="form-group">
-                    <?php if (!empty($user['profile_picture_url'])): ?>
-                        <img src="images/profile/<?php echo htmlspecialchars($user['profile_picture_url']); ?>" alt="Photo de profil" class="profile-picture">
-                    <?php else: ?>
-                        <img src="images/profile/defaut.png" alt="Photo de profil par défaut" class="profile-picture">
-                    <?php endif; ?>
-                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
-                    <button type="submit" name="update_photo" class="btn btn-primary">Mettre à jour la photo</button>
-                </div>
-            </form>
-
-            <!-- Section Informations de base -->
-            <form method="POST" class="account-form">
-                <h2>Informations personnelles</h2>
-                <div class="form-group">
-                    <label for="username">Nom d'utilisateur</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="bio">Biographie</label>
-                    <textarea id="bio" name="bio"><?php echo htmlspecialchars($user['bio'] ?? ''); ?></textarea>
-                </div>
-                <button type="submit" name="update_info" class="btn btn-primary">Mettre à jour les informations</button>
-            </form>
-
-            <!-- Section Mot de passe -->
-            <form method="POST" class="account-form">
-                <h2>Modification du mot de passe</h2>
-                <div class="form-group">
-                    <label for="current_password">Mot de passe actuel</label>
-                    <input type="password" id="current_password" name="current_password" required>
-                </div>
-                <div class="form-group">
-                    <label for="new_password">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirmer le nouveau mot de passe</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-                <button type="submit" name="update_password" class="btn btn-primary">Modifier le mot de passe</button>
-            </form>
-        </div>
-    </main>
-
-    <?php include 'footer.php'; ?>
-</body>
-</html>
+                <div class="form-group

@@ -19,6 +19,6 @@
     </div>
 </footer>
 <script src="/php/site/js/main.js"></script>
-<link rel="stylesheet" href="/app/assets/css/footer.css">
+<link rel="stylesheet" href="../../assets/css/footer.css">
 </body>
 </html>

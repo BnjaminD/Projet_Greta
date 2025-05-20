@@ -17,9 +17,7 @@ if (!isset($_SESSION['user_id']) && isset($_GET['showLogin'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - RestaurantApp</title>
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/styles.css">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/header.css">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="contact">

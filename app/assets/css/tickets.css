@@ -1,0 +1,249 @@
+/* Styles spécifiques uniquement aux tickets - isolation stricte */
+
+/* Reset seulement pour le conteneur des tickets */
+.tickets-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    padding: 30px;
+    font-family: inherit;
+    line-height: normal;
+}
+
+/* En-tête de la section tickets uniquement */
+.tickets-container > .tickets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tickets-container > .tickets-header > h1 {
+    font-size: 24px;
+    color: #1a1f36;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    text-transform: none;
+}
+
+/* Filtres des tickets */
+.tickets-container .tickets-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Style des boutons de filtre UNIQUEMENT dans le conteneur de tickets */
+.tickets-container .tickets-filters .filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: white;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tickets-container .tickets-filters .filter-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+/* Grille de tickets */
+.tickets-container > .tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Style de cartes de tickets - isolation stricte pour éviter les conflits */
+.tickets-container > .tickets-grid > .ticket-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.tickets-container > .tickets-grid > .ticket-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Isolation stricte pour tous les éléments intérieurs aux cartes */
+.tickets-container .ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tickets-container .ticket-id {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.tickets-container .ticket-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #f3f4f6;
+}
+
+/* Style spécifique pour chaque statut */
+.tickets-container .ticket-pending .ticket-status {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.tickets-container .ticket-in-progress .ticket-status {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.tickets-container .ticket-completed .ticket-status {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+/* Corps de la carte */
+.tickets-container .ticket-body {
+    margin-bottom: 20px;
+}
+
+.tickets-container .ticket-restaurant {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1a1f36;
+}
+
+.tickets-container .ticket-user, 
+.tickets-container .ticket-date {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 5px;
+}
+
+.tickets-container .ticket-content {
+    margin: 15px 0;
+    line-height: 1.5;
+    color: #4b5563;
+}
+
+/* Étoiles de notation */
+.tickets-container .ticket-rating {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.tickets-container .ticket-rating .fa-star {
+    color: #d1d5db;
+}
+
+.tickets-container .ticket-rating .fa-star.active {
+    color: #f59e0b;
+}
+
+/* Actions sur tickets - isolation stricte */
+.tickets-container .ticket-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Style UNIQUEMENT pour les boutons d'action dans les tickets */
+.tickets-container .ticket-actions .btn-action {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+}
+
+.tickets-container .ticket-actions .btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Boutons d'action spécifiques */
+.tickets-container .ticket-actions .validate {
+    background: #10b981;
+}
+
+.tickets-container .ticket-actions .validate:hover {
+    background: #059669;
+}
+
+.tickets-container .ticket-actions .progress {
+    background: #3b82f6;
+}
+
+.tickets-container .ticket-actions .progress:hover {
+    background: #2563eb;
+}
+
+.tickets-container .ticket-actions .complete {
+    background: #8b5cf6;
+}
+
+.tickets-container .ticket-actions .complete:hover {
+    background: #7c3aed;
+}
+
+.tickets-container .ticket-actions .delete {
+    background: #ef4444;
+}
+
+.tickets-container .ticket-actions .delete:hover {
+    background: #dc2626;
+}
+
+/* Message quand il n'y a pas de tickets */
+.tickets-container > .no-tickets {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+    font-size: 18px;
+}
+
+/* Media queries avec isolation stricte */
+@media (max-width: 768px) {
+    .tickets-container > .tickets-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .tickets-container .tickets-filters {
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .tickets-container .ticket-actions {
+        flex-direction: column;
+    }
+    
+    .tickets-container .ticket-actions .btn-action {
+        width: 100%;
+    }
+    
+    .tickets-container > .tickets-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -44,8 +44,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurants</title>
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/styles.css">
-    <link rel="stylesheet" href="/Projet_Greta/app/assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
 </head>
 <body>
     <?php 
@@ -62,10 +61,10 @@ try {
             if (!$restaurant) {
                 throw new Exception("Restaurant non trouvé");
             }
-            include VIEWS_PATH . '/pages/restaurants/single.php';
+            include VIEWS_PATH . '/pages/restaurant/single.php';
         } else {
             $restaurants = $restaurantController->findAll();
-            include VIEWS_PATH . '/pages/restaurants/list.php';
+            include VIEWS_PATH . '/pages/restaurants/list.php'; 
         }
         
         echo '</div>';
