@@ -51,6 +51,10 @@ try {
 function sanitize($data) {
     return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
+
+// Définir le titre de la page et la classe du body pour le header
+$pageTitle = 'Monitoring des Activités';
+$bodyClass = 'admin-monitoring';
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +63,13 @@ function sanitize($data) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoring des Activités Utilisateurs</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="/app/assets/css/styles.css"> <!-- Ensure path is correct -->
+    <style>
+        /* Additional inline style to ensure text visibility */
+        .activity-row td {
+            color: #333 !important; /* Force black text for table data */
+        }
+    </style>
 </head>
 <body class="admin-monitoring">
     <?php include dirname(__DIR__) . '/includes/header.php'; ?>

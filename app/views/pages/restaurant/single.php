@@ -1,4 +1,3 @@
-
 <main class="restaurant-detail">
     <h1><?= htmlspecialchars($restaurant->getName()) ?></h1>
     <div class="restaurant-content">
@@ -18,8 +17,9 @@
                 <p><i class="fas fa-utensils"></i> Cuisine: <?= htmlspecialchars($restaurant->getCuisineType()) ?></p>
             </div>
             <div class="actions">
-                <a href="../reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-primary">Réserver</a>
-                <a href="../menu.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-secondary">Voir le menu</a>
+                <a href="/php/v1.02/Projet_Greta/app/views/pages/reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" class="btn btn-primary">Réserver</a>
+                <a href="/php/v1.02/Projet_Greta/app/views/pages/menu.php?restaurant_id=<?= $restaurant->getId() ?>" 
+                   class="btn btn-secondary">Voir le menu</a>
             </div>
         </div>
     </div>

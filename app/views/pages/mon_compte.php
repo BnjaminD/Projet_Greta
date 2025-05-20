@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Correction des chemins de fichiers
-require_once dirname(__DIR__, 3) . '/autoload.php';
+require_once dirname(__DIR__, 2) . '/autoload.php';
 // Directement inclure le fichier functions.php
 require_once dirname(__DIR__, 2) . '/core/functions.php';
 
@@ -31,12 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
             if (in_array($ext, $allowed)) {
-                $target_dir = "images/profile/";
+                // Create absolute path to ensure files are saved in the correct location
+                $target_dir = dirname(__DIR__, 2) . "/images/profile/";
+                
+                // Ensure the directory exists
+                if (!is_dir($target_dir)) {
+                    mkdir($target_dir, 0755, true);
+                }
+                
                 $new_filename = uniqid() . "." . $ext;
                 $target_file = $target_dir . $new_filename;
 
                 if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file)) {
-                    // On stocke juste le nom du fichier dans la base de données
+                    // Store only the filename in the database, not the path
                     $stmt = $db->prepare("UPDATE user SET profile_picture_url = ? WHERE user_id = ?");
                     $stmt->execute([$new_filename, $user_id]);
                     $success_message = "Photo de profil mise à jour avec succès";
@@ -113,7 +120,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Compte</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
     <style>
         input[type="file"] {
             color: #000; /* Texte en noir */
@@ -138,7 +145,7 @@ try {
     </style>
 </head>
 <body class="mon-compte">
-    <?php include 'header.php'; ?>
+    <?php include dirname(__DIR__) . '/includes/header.php'; ?>
 
     <main class="container">
         <h1>Mon Compte</h1>
@@ -155,4 +162,58 @@ try {
             <!-- Section Photo de profil -->
             <form method="POST" enctype="multipart/form-data" class="account-form">
                 <h2>Photo de profil</h2>
-                <div class="form-group
+                <div class="form-group">
+                    <div class="profile-preview">
+                        <?php if (!empty($user['profile_picture_url'])): ?>
+                            <img src="../../images/profile/<?php echo htmlspecialchars($user['profile_picture_url']); ?>" alt="Photo de profil" class="profile-image">
+                        <?php else: ?>
+                            <img src="../../assets/images/default-profile.png" alt="Photo de profil par défaut" class="profile-image">
+                        <?php endif; ?>
+                    </div>
+                    <label for="profile_picture">Changer votre photo de profil</label>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour la photo</button>
+            </form>
+
+            <!-- Section Informations du compte -->
+            <form method="POST" class="account-form">
+                <h2>Informations du compte</h2>
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="bio">Biographie</label>
+                    <textarea id="bio" name="bio" rows="4"><?php echo htmlspecialchars($user['bio'] ?? ''); ?></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour les informations</button>
+            </form>
+
+            <!-- Section Changement de mot de passe -->
+            <form method="POST" class="account-form">
+                <h2>Changer le mot de passe</h2>
+                <div class="form-group">
+                    <label for="current_password">Mot de passe actuel</label>
+                    <input type="password" id="current_password" name="current_password">
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nouveau mot de passe</label>
+                    <input type="password" id="new_password" name="new_password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le mot de passe</label>
+                    <input type="password" id="confirm_password" name="confirm_password">
+                </div>
+                <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+            </form>
+        </div>
+    </main>
+    <script src="../../assets/js/scripts.js"></script>
+</body>
+
+</html>

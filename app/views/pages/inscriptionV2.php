@@ -15,7 +15,8 @@ require_once CORE_PATH . '/functions.php';
 require_once CORE_PATH . '/UserManager.php';
 require_once APP_PATH . '/models/User.php';
 
-use function app\core\{inscriptionUtilisateur};
+use function app\core\sanitize;
+use app\core\UserManager;
 
 try {
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
@@ -24,15 +25,6 @@ try {
 } catch (PDOException $e) {
     error_log("Erreur de connexion : " . $e->getMessage());
     die('Une erreur est survenue. Veuillez réessayer plus tard.');
-}
-
-require_once ('database.php');
-require_once ('functions.php');
-require_once APP_PATH . '/core/UserManager.php';
-require_once APP_PATH . '/models/User.php';
-
-function sanitize($data) {
-    return htmlspecialchars(strip_tags(trim($data)));
 }
 
 $message = '';
@@ -49,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } elseif (strlen($mot_de_passe) < 8) {
             $message = "Le mot de passe doit contenir au moins 8 caractères.";
         } else {
-            $userManager = new \app\core\UserManager($pdo);
+            $userManager = new UserManager($pdo);
             if ($userManager->inscriptionUtilisateur($username, $email, $mot_de_passe)) {
                 header("Location: connexionV2.php?inscription=success");
                 exit();

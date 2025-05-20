@@ -35,9 +35,21 @@ foreach ($cuisineTypes as $row) {
     $cuisineTypesArray[] = $row['cuisine_type'];
 }
 
-// Inclure le header avec le chemin complet
-include_once dirname(__DIR__) . '/includes/header.php';
+// Ajouter après les autres déclarations au début du fichier
+$baseUrl = '/php/v1.02/Projet_Greta/app/assets';
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Réservation de Restaurants</title>
+    <link rel="stylesheet" href="/php/v1.02/Projet_Greta/app/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="home-page">
+
+<?php include_once dirname(__DIR__) . '/includes/header.php'; ?>
 
 <div class="hero">
     <div class="hero-slideshow">
@@ -48,8 +60,8 @@ include_once dirname(__DIR__) . '/includes/header.php';
             'Fancy_fork.png'
         ];
         foreach($heroImages as $index => $image): 
-            // Correction du chemin d'accès aux images
-            $imagePath = "../../assets/images/restaurant/" . $image;
+            // Utiliser le chemin absolu avec $baseUrl
+            $imagePath = $baseUrl . "/images/restaurant/" . $image;
             $isActive = $index === 0 ? 'active' : '';
         ?>
             <div class="slide <?= $isActive ?>" 
@@ -86,8 +98,11 @@ include_once dirname(__DIR__) . '/includes/header.php';
     <h2>Restaurants les Mieux Notés</h2>
     <div class="restaurant-highlights">
         <?php foreach ($topRestaurants as $restaurant): 
-            // Nettoyer le chemin de l'image en retirant le slash initial
-            $imagePath = ltrim($restaurant['image_url'], '/');
+            // Convertir le chemin relatif en chemin absolu
+            $imagePath = $restaurant['image_url'];
+            if (strpos($imagePath, '/') !== 0 && strpos($imagePath, 'http') !== 0) {
+                $imagePath = $baseUrl . '/images/restaurant/' . $imagePath;
+            }
         ?>
             <div class="highlight-card">
                 <div class="card-image" 
@@ -140,7 +155,7 @@ include_once dirname(__DIR__) . '/includes/header.php';
 
 <?php include_once dirname(__DIR__) . '/includes/footer.php'; ?>
 
-<script src="../../assets/js/slideshow.js"></script>
+<script src="/php/v1.02/Projet_Greta/app/assets/js/slideshow.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Vérifie si les images du slideshow sont chargées correctement
@@ -160,3 +175,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</body>
+</html>

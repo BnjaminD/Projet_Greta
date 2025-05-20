@@ -1,18 +1,24 @@
 <?php
 session_start();
-require_once('database.php');
-require_once('functions.php');
-require_once('../models/Reservation.php');
-require_once('../controllers/ReservationController.php');
+// Corriger les chemins d'inclusion avec des chemins absolus
+require_once dirname(__DIR__, 2) . '/core/database.php';
+require_once dirname(__DIR__, 2) . '/core/functions.php';
+require_once dirname(__DIR__, 2) . '/models/Reservation.php';
+require_once dirname(__DIR__, 2) . '/controllers/ReservationController.php';
 
 use function app\core\{sanitize, connexionUtilisateur};
+use app\models\Reservation;
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: connexionV2.php');
     exit();
 }
 
-$controller = new ReservationController($pdo);
+// Obtenir l'instance de la base de données
+$db = \app\core\Database::getInstance();
+$pdo = $db->getPdo();
+
+$controller = new \ReservationController($pdo);
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -21,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $personnes = sanitize($_POST['personnes']);
     $user_id = $_SESSION['user_id'];
     $restaurant_id = $_GET['restaurant_id'];
+    $specialRequests = isset($_POST['special_requests']) ? sanitize($_POST['special_requests']) : null;
 
-    if ($controller->createReservation($restaurant_id, $user_id, $date, $heure, $personnes)) {
+    // Corriger l'ordre des paramètres pour correspondre à la signature de la méthode du contrôleur
+    if ($controller->createReservation($restaurant_id, $user_id, $date, $heure, $personnes, $specialRequests)) {
         $message = "Réservation confirmée !";
-    } else {
-        $message = "Erreur lors de la réservation.";
     }
 }
 
@@ -34,6 +40,8 @@ $restaurant = null;
 
 // Récupérer les informations du restaurant depuis la table restaurant
 if ($restaurant_id) {
+    $query = "SELECT * FROM restaurant WHERE restaurant_id = ?";
+    $stmt = $pdo->prepare($query);
     $query = "SELECT * FROM restaurant WHERE restaurant_id = ?";
     $stmt = $pdo->prepare($query);
     $stmt->execute([$restaurant_id]);
@@ -46,12 +54,12 @@ if ($restaurant_id) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
     <title>Réservation</title>
 </head>
 <body class="reservationV2">
 
-    <?php require_once 'header.php'; ?>
+    <?php require_once __DIR__ . '/../includes/header.php'; ?>
     
     <div class="reservation-wrapper">
         <div class="container">
@@ -74,6 +82,7 @@ if ($restaurant_id) {
                     <input type="number" name="personnes" placeholder="Nombre de personnes" min="1" max="10" required>
                     <input type="text" name="nom" placeholder="Votre nom" required>
                     <input type="email" name="email" placeholder="Votre email" required>
+                    <textarea name="special_requests" placeholder="Demandes spéciales"></textarea>
                     <input type="submit" value="Réserver" class="btn">
                 </form>
             </div>
@@ -86,5 +95,6 @@ if ($restaurant_id) {
         });
     </script>
 </body>
-<?php require_once 'footer.php'; ?>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 </html>

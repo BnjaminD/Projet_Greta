@@ -1,4 +1,3 @@
-
 <div class="restaurant-grid">
     <?php foreach($restaurants as $restaurant): ?>
         <article class="restaurant-card">
@@ -16,9 +15,9 @@
                     <p><strong>Note:</strong> <?= $restaurant->getRating() ?>/5</p>
                 </div>
                 <div class="restaurant-card__actions">
-                    <a href="../restaurant.php?id=<?= $restaurant->getId() ?>" 
-                       class="btn btn-secondary">Voir détails</a>
-                    <a href="../reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" 
+                    <a href="/php/v1.02/Projet_Greta/app/views/pages/menu.php?restaurant_id=<?= $restaurant->getId() ?>" 
+                       class="btn btn-secondary">Voir menu</a>
+                    <a href="/php/v1.02/Projet_Greta/app/views/pages/reservationV2.php?restaurant_id=<?= $restaurant->getId() ?>" 
                        class="btn btn-primary">Réserver</a>
                 </div>
             </div>

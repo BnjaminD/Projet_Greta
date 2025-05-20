@@ -18,7 +18,7 @@
         </div>
     </div>
 </footer>
-<script src="/php/site/js/main.js"></script>
+<script src="/php/v1.02/Projet_Greta/app/assets/js/main.js"></script>
 <link rel="stylesheet" href="../../assets/css/footer.css">
 </body>
 </html>

@@ -1,5 +1,7 @@
 <?php
-require_once '../models/Reservation.php';
+require_once dirname(__DIR__) . '/models/Reservation.php';
+
+use app\models\Reservation;
 
 class ReservationController {
     private $pdo;
@@ -10,21 +12,20 @@ class ReservationController {
         $this->reservation = new Reservation($pdo);
     }
 
-    public function createReservation($restaurant_id, $user_id, $date, $time, $guests) {
-        $reservation_time = date('Y-m-d H:i:s', strtotime("$date $time"));
-        return $this->reservation->create($restaurant_id, $user_id, $reservation_time, $guests);
+    /**
+     * Crée une nouvelle réservation
+     * 
+     * @param int $restaurantId ID du restaurant
+     * @param int $userId ID de l'utilisateur
+     * @param string $date Date de la réservation (Y-m-d)
+     * @param string $time Heure de la réservation (H:i)
+     * @param int $guests Nombre de personnes
+     * @param string|null $specialRequests Demandes spéciales (optionnel)
+     * @return bool Succès ou échec de l'opération
+     */
+    public function createReservation($restaurantId, $userId, $date, $time, $guests, $specialRequests = null) {
+        return $this->reservation->create($restaurantId, $userId, $date, $time, $guests, $specialRequests);
     }
-
-    public function cancelReservation($reservation_id, $user_id) {
-        if (!$this->reservation->getByUserAndId($reservation_id, $user_id)) {
-            return ['success' => false, 'message' => 'Réservation non trouvée ou non autorisée'];
-        }
-        
-        $success = $this->reservation->cancel($reservation_id, $user_id);
-        return [
-            'success' => $success,
-            'message' => $success ? 'La réservation a été annulée avec succès' : 'Erreur lors de l\'annulation'
-        ];
-    }
+    
+    // ...existing code...
 }
-?>

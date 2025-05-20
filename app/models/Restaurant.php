@@ -45,7 +45,20 @@ class Restaurant implements RestaurantInterface {
     public function getCapacity(): int { return $this->capacity; }
     public function getRating(): float { return $this->rating; }
     public function getCuisineType(): string { return $this->cuisineType; }
-    public function getImagePath(): string { return $this->imagePath; }
+
+    public function getImagePath(): string
+    {
+        // Le problème est que la propriété est $imagePath mais vous essayez d'accéder à $image_url
+        $imagePath = $this->imagePath; // Utiliser la propriété correcte
+        
+        // Si le chemin commence par un slash ou http, il est déjà absolu
+        if (strpos($imagePath, '/') === 0 || strpos($imagePath, 'http') === 0) {
+            return $imagePath;
+        }
+        
+        // Sinon, le normaliser avec notre fonction
+        return \app\core\normalizeImagePath($imagePath, 'restaurant');
+    }
 
     public function getTopRated($limit = 3): array {
         $stmt = $this->db->prepare("SELECT * FROM restaurant ORDER BY rating DESC LIMIT ?");

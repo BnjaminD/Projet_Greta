@@ -80,10 +80,12 @@ if ($isAdmin) {
 <html>
 <head>
     <title><?= $isAdmin ? "Monitoring - Administration" : "Mes Commandes et Réservations" ?></title>
-    <link href="../../assets/css/styles.css" rel="stylesheet">
+    <link href="/php/v1.02/Projet_Greta/app/assets/css/styles.css?v=<?= time() ?>" rel="stylesheet">
+    <link href="/php/v1.02/Projet_Greta/app/assets/css/commandes.css?v=<?= time() ?>" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="<?= $isAdmin ? 'admin-monitoring' : 'user-orders' ?>">
+    
     <div class="page-wrapper">
         <?php include dirname(__DIR__) . '/includes/header.php'; ?>
         
@@ -115,6 +117,8 @@ if ($isAdmin) {
                             <?php if ($isAdmin): ?><td><?= htmlspecialchars($order['user_email']) ?></td><?php endif; ?>
                             <td><?= date('d/m/Y H:i', strtotime($order['ordered_at'])) ?></td>
                             <td>
+                                <!-- Ajoutez une ligne de débogage -->
+                                <small style="display:block; color:#999; font-size:10px;">Class: status-<?= strtolower($order['status']) ?></small>
                                 <span class="status-badge status-<?= strtolower($order['status']) ?>">
                                     <?= htmlspecialchars($order['status']) ?>
                                 </span>

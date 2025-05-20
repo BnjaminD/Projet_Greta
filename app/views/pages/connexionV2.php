@@ -5,8 +5,6 @@ require_once __DIR__ . '/../../core/Database.php';
 require_once __DIR__ . '/../../core/functions.php';
 require_once __DIR__ . '/../../core/config.php';
 
-use app\core\Database;
-use app\core\Functions;
 use function app\core\{sanitize, connexionUtilisateur};
 
 // Enable error reporting for debugging
@@ -40,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: Commandes.php");
                 exit();
             } else {
-                header("Location: espace_personnel.php");
+                // Changer la redirection de espace_personnel.php vers accueil.php
+                header("Location: accueil.php");
                 exit();
             }
         } else {

@@ -1,0 +1,1087 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : localhost:8889
+-- Généré le : mar. 20 mai 2025 à 13:19
+-- Version du serveur : 8.0.35
+-- Version de PHP : 8.2.20
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `Application`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `admin_actions`
+--
+
+CREATE TABLE `admin_actions` (
+  `action_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `action_type` varchar(50) NOT NULL,
+  `action_details` text,
+  `performed_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip_address` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `admin_actions`
+--
+
+INSERT INTO `admin_actions` (`action_id`, `user_id`, `action_type`, `action_details`, `performed_at`, `ip_address`) VALUES
+(1, 17, 'USER_BAN', 'Banned user ID 5 for spam', '2025-02-11 13:43:25', '192.168.1.1'),
+(2, 18, 'COMMENT_DELETE', 'Deleted inappropriate comment ID 15', '2025-02-11 13:43:25', '192.168.1.2');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `admin_user`
+--
+
+CREATE TABLE `admin_user` (
+  `admin_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_super_admin` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `admin_user`
+--
+
+INSERT INTO `admin_user` (`admin_id`, `user_id`, `created_at`, `is_super_admin`) VALUES
+(4, 17, '2025-02-11 13:02:25', 1),
+(5, 18, '2025-02-11 13:02:25', 1),
+(8, 3, '2025-02-11 13:12:45', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `comment`
+--
+
+CREATE TABLE `comment` (
+  `comment_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `content` text NOT NULL,
+  `rating` float DEFAULT NULL,
+  `is_moderated` tinyint(1) DEFAULT '0',
+  `is_in_progress` tinyint(1) DEFAULT '0',
+  `is_completed` tinyint(1) DEFAULT '0',
+  `moderated_at` timestamp NULL DEFAULT NULL,
+  `moderated_by` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `comment`
+--
+
+INSERT INTO `comment` (`comment_id`, `restaurant_id`, `user_id`, `content`, `rating`, `is_moderated`, `is_in_progress`, `is_completed`, `moderated_at`, `moderated_by`, `created_at`) VALUES
+(1, 1, 1, 'Amazing food and great ambiance!', 5, 0, 0, 0, NULL, 8, '2024-11-19 10:55:13'),
+(2, 2, 2, 'Pizza was delicious but delivery took too long.', 4, 1, 0, 0, NULL, 8, '2024-11-19 10:55:13'),
+(3, 1, 1, 'Excellent service et plats délicieux !', 5, 0, 0, 0, NULL, 8, '2025-01-29 09:12:25'),
+(4, 2, 2, 'Bonne ambiance, cuisine raffinée', 4, 0, 0, 0, NULL, 8, '2025-01-29 09:12:25'),
+(5, 2, 1, 'Le menu est varié et les prix sont raisonnables', 4, 0, 0, 0, NULL, 8, '2025-01-29 09:12:25');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `dish`
+--
+
+CREATE TABLE `dish` (
+  `dish_id` int NOT NULL,
+  `menu_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `price` decimal(10,2) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `available` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `dish`
+--
+
+INSERT INTO `dish` (`dish_id`, `menu_id`, `name`, `description`, `price`, `category`, `image_url`, `available`) VALUES
+(1, 1, 'Steak au Poivre', 'Un steak juteux avec sauce au poivre noir frais moulu', 29.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Steak.png', 1),
+(2, 1, 'Coq au Vin', 'Poulet mijoté au vin rouge avec légumes de saison', 24.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Coq_au_vin.png', 1),
+(3, 1, 'Tarte Tatin', 'Tarte aux pommes caramélisées et pâte feuilletée', 9.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Tarte_tatin.png', 1),
+(4, 1, 'Salade César', 'Laitue romaine, parmesan, croûtons et sauce César maison', 12.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Salade_cesar.png', 1),
+(5, 2, 'Boeuf Bourguignon', 'Bœuf mijoté au vin rouge avec champignons et lardons', 28.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/boeuf_bourguignon.png', 1),
+(6, 2, 'Cordon Bleu', 'Escalope de poulet farcie au jambon et fromage', 25.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Cordon_bleu.png', 1),
+(7, 2, 'Saumon en Papillotte', 'Saumon frais cuit en papillote aux herbes', 26.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Saumon_papillotte.png', 1),
+(8, 3, 'Margherita Pizza', 'Sauce tomate, mozzarella fraîche et basilic', 12.99, 'Pizza', '/php/v1.02/Projet_Greta/app/assets/images/dishes/pizza.png', 1),
+(9, 3, 'Pizza Quattro Formaggi', 'Mélange de quatre fromages italiens', 14.99, 'Pizza', '/php/v1.02/Projet_Greta/app/assets/images/dishes/pizza2.png', 1),
+(10, 3, 'Pizza Pepperoni', 'Pepperoni, mozzarella et sauce tomate', 13.99, 'Pizza', '/php/v1.02/Projet_Greta/app/assets/images/dishes/pizza3.png', 1),
+(11, 4, 'Pâtes Carbonara', 'Spaghetti à la crème, œuf et lardons', 15.99, 'Pâtes', '/php/v1.02/Projet_Greta/app/assets/images/dishes/pasta.png', 1),
+(12, 4, 'Lasagne Bolognaise', 'Lasagnes traditionnelles à la sauce bolognaise', 16.99, 'Pâtes', '/php/v1.02/Projet_Greta/app/assets/images/dishes/pasta1.png', 1),
+(13, 4, 'Tiramisu', 'Dessert italien au café et mascarpone', 7.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes//Tiramisu.png', 1),
+(14, 5, 'Sushi Mix', 'Assortiment de sushis variés (12 pièces)', 22.99, 'Sushi', '/php/v1.02/Projet_Greta/app/assets/images/dishes/sushi.png', 1),
+(15, 5, 'California Roll', 'Rouleaux de crabe, avocat et concombre (8 pièces)', 16.99, 'Maki', '/php/v1.02/Projet_Greta/app/assets/images/dishes/sushi1.png', 1),
+(16, 5, 'Sashimi Saumon', 'Tranches de saumon frais (10 pièces)', 18.99, 'Sashimi', '/php/v1.02/Projet_Greta/app/assets/images/dishes/sushi2.png', 1),
+(17, 6, 'Tempura Crevettes', 'Crevettes frites en tempura avec sauce', 17.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Tempura_Crevettes.png', 1),
+(18, 6, 'Ramen Miso', 'Soupe ramen au miso avec porc chachu', 15.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Ramen_Miso.png', 1),
+(19, 6, 'Mochi Glacé', 'Dessert japonais glacé aux fruits', 6.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/Mochi_Glace.png', 1),
+(20, 7, 'Soupe à l\'Oignon', 'Soupe traditionnelle à l\'oignon gratinée au fromage', 8.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/soupe_oignon.png', 1),
+(21, 7, 'Escargots de Bourgogne', 'Escargots au beurre d\'ail et aux herbes', 12.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/escargots.png', 1),
+(22, 7, 'Blanquette de Veau', 'Veau mijoté en sauce blanche avec légumes', 24.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/blanquette.png', 1),
+(23, 7, 'Crème Brûlée', 'Crème vanillée avec croûte de sucre caramélisé', 7.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/creme_brulee.png', 1),
+(24, 8, 'Foie Gras Maison', 'Foie gras mi-cuit avec chutney de figues', 16.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/foie_gras.png', 1),
+(25, 8, 'Magret de Canard', 'Magret de canard avec sauce aux fruits rouges', 28.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/magret.png', 1),
+(26, 8, 'Profiteroles', 'Choux à la crème avec sauce au chocolat', 9.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/profiteroles.png', 1),
+(27, 9, 'Samosas', 'Chaussons frits aux légumes et épices', 7.99, 'Entrée', '/php/v1.02/Projet_Greta/app/assets/images/dishes/samosas.png', 1),
+(28, 9, 'Poulet Tandoori', 'Poulet mariné aux épices et cuit au tandoor', 19.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/tandoori.png', 1),
+(29, 9, 'Agneau Biryani', 'Riz parfumé avec agneau et épices', 22.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/biryani.png', 1),
+(30, 9, 'Gulab Jamun', 'Boulettes de lait sucrées au sirop', 6.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/gulab.png', 1),
+(31, 10, 'Dal Makhani', 'Lentilles noires mijotées en sauce crémeuse', 16.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/dal.png', 1),
+(32, 10, 'Palak Paneer', 'Fromage indien aux épinards', 17.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/palak.png', 1),
+(33, 10, 'Naan Nature', 'Pain indien traditionnel', 3.99, 'Accompagnement', '/php/v1.02/Projet_Greta/app/assets/images/dishes/naan.png', 1),
+(34, 11, 'Patatas Bravas', 'Pommes de terre sauce épicée', 6.99, 'Tapas', '/php/v1.02/Projet_Greta/app/assets/images/dishes/patatas.png', 1),
+(35, 11, 'Jamón Ibérico', 'Jambon ibérique de bellota', 14.99, 'Tapas', '/php/v1.02/Projet_Greta/app/assets/images/dishes/jamon.png', 1),
+(36, 11, 'Tortilla Española', 'Omelette espagnole aux pommes de terre', 8.99, 'Tapas', '/php/v1.02/Projet_Greta/app/assets/images/dishes/tortilla.png', 1),
+(37, 11, 'Gambas al Ajillo', 'Crevettes à l\'ail', 12.99, 'Tapas', '/php/v1.02/Projet_Greta/app/assets/images/dishes/gambas.png', 1),
+(38, 12, 'Paella Valenciana', 'Paella traditionnelle au poulet et fruits de mer', 24.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/paella.png', 1),
+(39, 12, 'Paella Marinera', 'Paella aux fruits de mer', 26.99, 'Plat Principal', '/php/v1.02/Projet_Greta/app/assets/images/dishes/paella_mar.png', 1),
+(40, 12, 'Crema Catalana', 'Crème catalane traditionnelle', 6.99, 'Dessert', '/php/v1.02/Projet_Greta/app/assets/images/dishes/crema.png', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `dish_ingredient`
+--
+
+CREATE TABLE `dish_ingredient` (
+  `dish_id` int NOT NULL,
+  `ingredient_id` int NOT NULL,
+  `quantity` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `dish_ingredient`
+--
+
+INSERT INTO `dish_ingredient` (`dish_id`, `ingredient_id`, `quantity`) VALUES
+(1, 4, '15g'),
+(1, 5, '100ml'),
+(1, 6, '250g'),
+(1, 11, '30g'),
+(1, 12, '2 gousses'),
+(2, 7, '1 poulet'),
+(2, 12, '3 gousses'),
+(2, 13, '2 pièces'),
+(2, 14, '200g'),
+(3, 9, '250g'),
+(3, 10, '1 pièce'),
+(3, 11, '150g'),
+(4, 2, '50g'),
+(4, 10, '1 pièce'),
+(4, 12, '1 gousse'),
+(5, 6, '800g'),
+(5, 12, '4 gousses'),
+(5, 13, '3 pièces'),
+(5, 14, '200g'),
+(6, 2, '100g'),
+(6, 7, '200g'),
+(6, 9, '50g'),
+(6, 10, '1 pièce'),
+(6, 11, '30g'),
+(6, 12, '2 gousses'),
+(7, 8, '200g'),
+(8, 1, '150g'),
+(8, 2, '150g'),
+(8, 3, '10g'),
+(8, 9, '300g'),
+(9, 2, '200g'),
+(9, 9, '300g'),
+(10, 1, '150g'),
+(10, 2, '150g'),
+(10, 9, '300g'),
+(11, 5, '100ml'),
+(11, 9, '350g'),
+(11, 10, '2 pièces'),
+(12, 1, '200g'),
+(12, 2, '200g'),
+(12, 6, '300g'),
+(12, 9, '400g'),
+(12, 10, '2 pièces'),
+(13, 5, '250ml'),
+(13, 10, '3 pièces'),
+(14, 8, '200g'),
+(15, 8, '150g'),
+(16, 8, '200g'),
+(17, 9, '200g'),
+(17, 10, '1 pièce'),
+(18, 7, '100g'),
+(18, 10, '1 pièce'),
+(18, 13, '1 pièce'),
+(19, 9, '150g');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `favorite`
+--
+
+CREATE TABLE `favorite` (
+  `user_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `favorite`
+--
+
+INSERT INTO `favorite` (`user_id`, `restaurant_id`, `created_at`) VALUES
+(1, 1, '2024-11-19 10:55:13'),
+(2, 2, '2024-11-19 10:55:13');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ingredient_catalog`
+--
+
+CREATE TABLE `ingredient_catalog` (
+  `ingredient_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `allergen` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `ingredient_catalog`
+--
+
+INSERT INTO `ingredient_catalog` (`ingredient_id`, `name`, `allergen`) VALUES
+(1, 'Tomato', 0),
+(2, 'Mozzarella', 1),
+(3, 'Basil', 0),
+(4, 'Black Pepper', 0),
+(5, 'Cream', 1),
+(6, 'Beef', 0),
+(7, 'Chicken', 0),
+(8, 'Salmon', 0),
+(9, 'Flour', 1),
+(10, 'Eggs', 1),
+(11, 'Butter', 1),
+(12, 'Garlic', 0),
+(13, 'Onion', 0),
+(14, 'Mushrooms', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `likes`
+--
+
+CREATE TABLE `likes` (
+  `user_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `is_moderated` tinyint(1) DEFAULT '0',
+  `moderated_at` timestamp NULL DEFAULT NULL,
+  `moderated_by` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `likes`
+--
+
+INSERT INTO `likes` (`user_id`, `restaurant_id`, `is_moderated`, `moderated_at`, `moderated_by`, `created_at`) VALUES
+(1, 1, 0, NULL, 8, '2024-11-19 10:55:13'),
+(2, 2, 0, NULL, 8, '2024-11-19 10:55:13');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `menu`
+--
+
+CREATE TABLE `menu` (
+  `menu_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `menu`
+--
+
+INSERT INTO `menu` (`menu_id`, `restaurant_id`, `name`, `description`, `is_active`, `created_at`) VALUES
+(1, 1, 'Menu Gastronomique', 'Notre sélection de plats raffinés', 1, '2025-02-12 10:51:39'),
+(2, 1, 'Menu Dégustation', 'Une expérience culinaire unique', 1, '2025-02-12 10:51:39'),
+(3, 2, 'Menu Pizza', 'Nos meilleures pizzas italiennes', 1, '2025-02-12 10:51:39'),
+(4, 2, 'Menu Pasta', 'Sélection de pâtes fraîches', 1, '2025-02-12 10:51:39'),
+(5, 3, 'Menu Sushi', 'Assortiment de sushis frais', 1, '2025-02-12 10:51:39'),
+(6, 3, 'Menu Découverte', 'Spécialités japonaises', 1, '2025-02-12 10:51:39'),
+(7, 4, 'Menu Traditionnel', 'Une sélection de nos plats traditionnels français', 1, '2025-02-17 11:28:01'),
+(8, 4, 'Menu Dégustation', 'Un voyage culinaire à travers la cuisine française', 1, '2025-02-17 11:28:01'),
+(9, 5, 'Menu Royal', 'Une expérience gastronomique indienne royale', 1, '2025-02-17 11:28:01'),
+(10, 5, 'Menu Végétarien', 'Sélection de nos meilleurs plats végétariens', 1, '2025-02-17 11:28:01'),
+(11, 6, 'Menu Tapas', 'Assortiment de tapas traditionnelles espagnoles', 1, '2025-02-17 11:28:01'),
+(12, 6, 'Menu Paella', 'Spécialités de riz espagnol', 1, '2025-02-17 11:28:01');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `moderation_action`
+--
+
+CREATE TABLE `moderation_action` (
+  `action_id` int NOT NULL,
+  `admin_id` int NOT NULL,
+  `action_type` varchar(50) NOT NULL,
+  `target_type` varchar(50) NOT NULL,
+  `target_id` int NOT NULL,
+  `reason` text,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `moderation_action`
+--
+
+INSERT INTO `moderation_action` (`action_id`, `admin_id`, `action_type`, `target_type`, `target_id`, `reason`, `created_at`) VALUES
+(1, 4, 'ban', 'user', 2, 'Spamming inappropriate comments.', '2024-11-19 10:55:13');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `oauth_account`
+--
+
+CREATE TABLE `oauth_account` (
+  `oauth_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `provider` varchar(50) NOT NULL,
+  `provider_user_id` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `oauth_account`
+--
+
+INSERT INTO `oauth_account` (`oauth_id`, `user_id`, `provider`, `provider_user_id`, `created_at`) VALUES
+(1, 1, 'google', 'google_user_123', '2024-11-19 10:55:13'),
+(2, 2, 'facebook', 'facebook_user_456', '2024-11-19 10:55:13');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `order`
+--
+
+CREATE TABLE `order` (
+  `order_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `total_price` decimal(10,2) NOT NULL,
+  `status` varchar(50) DEFAULT 'pending',
+  `ordered_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `order`
+--
+
+INSERT INTO `order` (`order_id`, `user_id`, `restaurant_id`, `total_price`, `status`, `ordered_at`) VALUES
+(1, 1, 1, 59.98, 'completed', '2024-11-19 10:55:13'),
+(2, 2, 2, 25.98, 'pending', '2024-11-19 10:55:13');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `order_item`
+--
+
+CREATE TABLE `order_item` (
+  `order_item_id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `dish_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `permission_id` int NOT NULL,
+  `permission_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `permissions`
+--
+
+INSERT INTO `permissions` (`permission_id`, `permission_name`) VALUES
+(1, 'admin.access'),
+(4, 'admin.content.moderate'),
+(2, 'admin.dashboard.view'),
+(3, 'admin.users.manage');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `reservation`
+--
+
+CREATE TABLE `reservation` (
+  `reservation_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `reservation_time` timestamp NOT NULL,
+  `number_of_guests` int NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `special_requests` text,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`reservation_id`, `restaurant_id`, `user_id`, `reservation_time`, `number_of_guests`, `status`, `special_requests`, `created_at`) VALUES
+(1, 1, 1, '2024-11-20 18:00:00', 2, 'confirmed', 'Table near the window.', '2024-11-19 10:55:13'),
+(2, 2, 2, '2024-11-21 19:30:00', 4, 'pending', NULL, '2024-11-19 10:55:13'),
+(4, 1, 19, '2025-02-27 19:30:00', 5, 'cancelled', NULL, '2025-02-17 13:08:17'),
+(5, 2, 17, '2025-02-19 20:11:00', 5, 'pending', NULL, '2025-02-17 14:05:13'),
+(6, 6, 19, '2025-03-21 20:30:00', 2, 'pending', NULL, '2025-03-07 10:37:20'),
+(7, 3, 19, '2025-05-22 13:00:00', 3, 'pending', 'de porc, de boeuf', '2025-05-20 09:54:43');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `restaurant`
+--
+
+CREATE TABLE `restaurant` (
+  `restaurant_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `address` varchar(255) NOT NULL,
+  `phone_number` varchar(20) NOT NULL,
+  `opening_hours` varchar(255) NOT NULL,
+  `capacity` int NOT NULL,
+  `rating` float DEFAULT NULL,
+  `cuisine_type` varchar(100) DEFAULT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `restaurant`
+--
+
+INSERT INTO `restaurant` (`restaurant_id`, `name`, `description`, `address`, `phone_number`, `opening_hours`, `capacity`, `rating`, `cuisine_type`, `image_url`, `latitude`, `longitude`, `created_at`) VALUES
+(1, 'The Fancy Fork', 'A fine dining experience.', '123 Main St, City', '123-456-7890', '9:00 AM - 10:00 PM', 50, 4.8, 'French', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/fancy_fork.png', 48.85660000, 2.35220000, '2024-11-19 10:55:13'),
+(2, 'Pizza Paradise', 'Best pizza in town!', '456 Elm St, City', '987-654-3210', '11:00 AM - 11:00 PM', 100, 4.5, 'Italian', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/pizza_paradise.png', 48.85670000, 2.35230000, '2024-11-19 10:55:13'),
+(3, 'Sushi World', 'Fresh sushi and sashimi.', '789 Oak St, City', '555-123-4567', '12:00 PM - 10:00 PM', 80, 4.7, 'Japanese', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/sushi_world.png', 48.85680000, 2.35240000, '2024-11-19 09:55:13'),
+(4, 'Le Bistrot Parisien', 'Authentic French cuisine in a cozy atmosphere', '15 Rue de la Paix, Paris', '01-23-45-67-89', '11:30 AM - 11:00 PM', 40, 4.6, 'French', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/bistrot_parisien.png', 48.87034000, 2.33186000, '2025-02-11 12:19:11'),
+(5, 'Taj Mahal', 'Fine Indian dining experience', '78 Avenue des Champs-Élysées, Paris', '01-98-76-54-32', '12:00 PM - 10:30 PM', 60, 4.4, 'Indian', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/taj_mahal.png', 48.86923000, 2.30984000, '2025-02-11 12:19:11'),
+(6, 'El Tapas', 'Traditional Spanish tapas bar', '25 Rue du Commerce, Paris', '01-45-67-89-12', '6:00 PM - 2:00 AM', 35, 4.3, 'Spanish', '/php/v1.02/Projet_Greta/app/assets/images/restaurant/el_tapas.png', 48.84789000, 2.29456000, '2025-02-11 12:19:11');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `system_logs`
+--
+
+CREATE TABLE `system_logs` (
+  `log_id` int NOT NULL,
+  `log_type` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  `trace` text,
+  `severity` varchar(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `context` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `system_logs`
+--
+
+INSERT INTO `system_logs` (`log_id`, `log_type`, `message`, `trace`, `severity`, `created_at`, `ip_address`, `user_agent`, `context`) VALUES
+(1, 'LOGIN_ATTEMPT', 'Failed login attempt for user admin@example.com', NULL, 'WARNING', '2025-02-11 13:43:25', '192.168.1.1', NULL, NULL),
+(2, 'SYSTEM_ERROR', 'Database connection timeout', NULL, 'ERROR', '2025-02-11 13:43:25', '192.168.1.1', NULL, NULL),
+(3, 'USER_ACTION', 'New user registration', NULL, 'INFO', '2025-02-11 13:43:25', '192.168.1.2', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+CREATE TABLE `user` (
+  `user_id` int NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `profile_picture_url` varchar(255) DEFAULT NULL,
+  `bio` text,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_login` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `is_banned` tinyint(1) DEFAULT '0',
+  `banned_at` timestamp NULL DEFAULT NULL,
+  `banned_by` int DEFAULT NULL,
+  `email_verified` tinyint(1) DEFAULT '0',
+  `failed_login_attempts` int DEFAULT '0',
+  `account_locked_until` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`user_id`, `email`, `password_hash`, `username`, `profile_picture_url`, `bio`, `created_at`, `last_login`, `is_active`, `is_banned`, `banned_at`, `banned_by`, `email_verified`, `failed_login_attempts`, `account_locked_until`) VALUES
+(1, 'user1@example.com', 'hashedpassword1', 'UserOne', 'user1.png', 'Bio of User One', '2024-11-19 10:55:13', NULL, 1, 0, NULL, 3, 1, 0, NULL),
+(2, 'user2@example.com', 'hashedpassword2', 'UserTwo', 'user2.png', 'Bio of User Two', '2024-11-19 10:55:13', NULL, 1, 0, NULL, 3, 0, 1, NULL),
+(3, 'ancien.admin@example.com', '$2y$10$ancien_hash', 'ancien_admin', 'admin.png', 'administrateur original', '2025-02-11 13:12:45', NULL, 1, 0, NULL, 3, 1, 0, NULL),
+(6, 'benjamin.dronne@gmail.com', '$2y$10$3n.EWoxlhJ7VmQME9zIxueoMoZuixIckK7hbiKX0Hryny8or3Ftb2', 'Benji', 'default.png', NULL, '2024-12-03 10:08:20', NULL, 1, 0, NULL, 3, 0, 0, NULL),
+(17, 'nouvel.admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '67b3514637879.png', 'administrateur', '2025-02-11 13:02:25', '2025-05-20 12:33:10', 1, 0, NULL, 3, 1, 0, NULL),
+(18, 'nouvel02.admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'a_benji', '67fe55b83ac04.jpeg', 'administrateur Benjamin :)', '2025-02-11 13:02:25', NULL, 1, 0, NULL, 3, 1, 0, NULL),
+(19, 'marc@gmail.com', '$2y$12$4wjsGr2CgUseZTZFRs8yMOFbApmR2SfcjI8/gemJ.IKN6Ibcg7Dja', 'marc', '67b33f059302f.png', 'Hello, moi c&#039;est Marc', '2025-02-11 13:15:32', '2025-05-20 12:31:31', 1, 0, NULL, NULL, 0, 0, NULL),
+(20, 'sce@gmail.com', '$2y$12$buFMRTnBTXr1XyfhGiLFwOBo7HE80hA2oXbKSgRwpNPU0IJ5v6j9K', 'benjip', '67b341102b93c.png', NULL, '2025-02-17 13:26:07', NULL, 1, 0, NULL, NULL, 0, 0, NULL);
+
+--
+-- Déclencheurs `user`
+--
+DELIMITER $$
+CREATE TRIGGER `set_default_profile_picture` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
+    IF NEW.profile_picture_url IS NULL THEN
+        SET NEW.profile_picture_url = 'image/profile/default.jpg';
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user_activity_log`
+--
+
+CREATE TABLE `user_activity_log` (
+  `activity_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `performed_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `details` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `user_activity_log`
+--
+
+INSERT INTO `user_activity_log` (`activity_id`, `user_id`, `action`, `performed_at`, `details`) VALUES
+(1, 1, 'Login', '2024-11-19 10:55:13', 'User logged in successfully.'),
+(2, 2, 'Reservation', '2024-11-19 10:55:13', 'User reserved a table for 4.'),
+(3, 19, 'Login', '2025-05-19 09:42:06', 'Connexion réussie'),
+(4, 17, 'Login', '2025-05-19 09:42:20', 'Connexion réussie'),
+(5, 19, 'Login', '2025-05-19 09:48:04', 'Connexion réussie'),
+(6, 19, 'Login', '2025-05-19 09:50:24', 'Connexion réussie'),
+(7, 17, 'Login', '2025-05-19 09:50:37', 'Connexion réussie'),
+(8, 17, 'Login', '2025-05-19 09:52:13', 'Connexion réussie'),
+(9, 19, 'Login', '2025-05-19 09:52:26', 'Connexion réussie'),
+(10, 17, 'Login', '2025-05-19 09:52:35', 'Connexion réussie'),
+(11, 17, 'Login', '2025-05-19 09:54:54', 'Connexion réussie'),
+(12, 19, 'Login', '2025-05-19 09:55:18', 'Connexion réussie'),
+(13, 19, 'Login', '2025-05-19 10:00:49', 'Connexion réussie'),
+(14, 19, 'Login', '2025-05-19 10:01:14', 'Connexion réussie'),
+(15, 19, 'Login', '2025-05-19 10:05:22', 'Connexion réussie'),
+(16, 19, 'Login', '2025-05-19 10:08:13', 'Connexion réussie'),
+(17, 17, 'Login', '2025-05-19 10:09:33', 'Connexion réussie'),
+(18, 19, 'Login', '2025-05-19 10:11:52', 'Connexion réussie'),
+(19, 19, 'Login', '2025-05-19 10:14:20', 'Connexion réussie'),
+(20, 19, 'Login', '2025-05-19 10:22:35', 'Connexion réussie'),
+(21, 19, 'Logout', '2025-05-19 11:56:47', 'Déconnexion effectuée'),
+(22, 19, 'Login', '2025-05-19 12:00:05', 'Connexion réussie'),
+(23, 19, 'Logout', '2025-05-19 12:00:08', 'Déconnexion effectuée'),
+(24, 17, 'Login', '2025-05-19 12:17:30', 'Connexion réussie'),
+(25, 17, 'Login', '2025-05-19 13:02:32', 'Connexion réussie'),
+(26, 17, 'Logout', '2025-05-19 13:19:55', 'Déconnexion effectuée'),
+(27, 17, 'Login', '2025-05-20 09:16:21', 'Connexion réussie'),
+(28, 17, 'Logout', '2025-05-20 09:35:36', 'Déconnexion effectuée'),
+(29, 19, 'Login', '2025-05-20 09:37:47', 'Connexion réussie'),
+(30, 19, 'Logout', '2025-05-20 09:54:47', 'Déconnexion effectuée'),
+(31, 17, 'Login', '2025-05-20 09:54:57', 'Connexion réussie'),
+(32, 17, 'Logout', '2025-05-20 11:51:25', 'Déconnexion effectuée'),
+(33, 19, 'Login', '2025-05-20 12:27:25', 'Connexion réussie'),
+(34, 19, 'Logout', '2025-05-20 12:31:12', 'Déconnexion effectuée'),
+(35, 19, 'Login', '2025-05-20 12:31:31', 'Connexion réussie'),
+(36, 19, 'Logout', '2025-05-20 12:32:54', 'Déconnexion effectuée'),
+(37, 17, 'Login', '2025-05-20 12:33:10', 'Connexion réussie');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user_permissions`
+--
+
+CREATE TABLE `user_permissions` (
+  `user_id` int NOT NULL,
+  `permission_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `user_permissions`
+--
+
+INSERT INTO `user_permissions` (`user_id`, `permission_id`) VALUES
+(3, 1),
+(17, 1),
+(18, 1),
+(3, 2),
+(17, 2),
+(18, 2),
+(3, 3),
+(17, 3),
+(18, 3),
+(3, 4),
+(17, 4),
+(18, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user_roles`
+--
+
+CREATE TABLE `user_roles` (
+  `user_role_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `role_name` varchar(50) NOT NULL,
+  `assigned_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `user_roles`
+--
+
+INSERT INTO `user_roles` (`user_role_id`, `user_id`, `role_name`, `assigned_at`) VALUES
+(1, 1, 'user', '2024-11-19 10:55:13'),
+(2, 2, 'user', '2024-11-19 10:55:13'),
+(4, 18, 'admin', '2025-02-11 13:02:25'),
+(7, 3, 'admin', '2025-02-11 13:12:45'),
+(8, 19, 'user', '2025-02-11 13:36:04'),
+(9, 6, 'user', '2025-02-11 13:36:04'),
+(11, 17, 'admin', '2025-02-11 13:36:04'),
+(12, 20, 'user', '2025-02-17 13:26:07');
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `admin_actions`
+--
+ALTER TABLE `admin_actions`
+  ADD PRIMARY KEY (`action_id`),
+  ADD KEY `fk_admin_actions_user` (`user_id`);
+
+--
+-- Index pour la table `admin_user`
+--
+ALTER TABLE `admin_user`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD KEY `fk_admin_user` (`user_id`);
+
+--
+-- Index pour la table `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`comment_id`),
+  ADD KEY `fk_comment_user` (`user_id`),
+  ADD KEY `fk_comment_moderated_by` (`moderated_by`),
+  ADD KEY `idx_comment_restaurant` (`restaurant_id`);
+
+--
+-- Index pour la table `dish`
+--
+ALTER TABLE `dish`
+  ADD PRIMARY KEY (`dish_id`),
+  ADD KEY `idx_dish_menu` (`menu_id`);
+
+--
+-- Index pour la table `dish_ingredient`
+--
+ALTER TABLE `dish_ingredient`
+  ADD PRIMARY KEY (`dish_id`,`ingredient_id`),
+  ADD KEY `fk_dish_ingredient_ingredient` (`ingredient_id`);
+
+--
+-- Index pour la table `favorite`
+--
+ALTER TABLE `favorite`
+  ADD PRIMARY KEY (`user_id`,`restaurant_id`),
+  ADD KEY `fk_favorite_restaurant` (`restaurant_id`);
+
+--
+-- Index pour la table `ingredient_catalog`
+--
+ALTER TABLE `ingredient_catalog`
+  ADD PRIMARY KEY (`ingredient_id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Index pour la table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`user_id`,`restaurant_id`),
+  ADD KEY `fk_like_restaurant` (`restaurant_id`),
+  ADD KEY `fk_like_moderated_by` (`moderated_by`);
+
+--
+-- Index pour la table `menu`
+--
+ALTER TABLE `menu`
+  ADD PRIMARY KEY (`menu_id`),
+  ADD KEY `fk_menu_restaurant` (`restaurant_id`);
+
+--
+-- Index pour la table `moderation_action`
+--
+ALTER TABLE `moderation_action`
+  ADD PRIMARY KEY (`action_id`),
+  ADD KEY `fk_moderation_action_admin` (`admin_id`);
+
+--
+-- Index pour la table `oauth_account`
+--
+ALTER TABLE `oauth_account`
+  ADD PRIMARY KEY (`oauth_id`),
+  ADD KEY `fk_oauth_user` (`user_id`),
+  ADD KEY `idx_oauth_provider_user` (`provider`,`provider_user_id`);
+
+--
+-- Index pour la table `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `fk_order_restaurant` (`restaurant_id`),
+  ADD KEY `idx_order_user_created` (`user_id`,`ordered_at`);
+
+--
+-- Index pour la table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD PRIMARY KEY (`order_item_id`),
+  ADD KEY `fk_order_item_order` (`order_id`),
+  ADD KEY `fk_order_item_dish` (`dish_id`);
+
+--
+-- Index pour la table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`permission_id`),
+  ADD UNIQUE KEY `permission_name` (`permission_name`);
+
+--
+-- Index pour la table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`reservation_id`),
+  ADD KEY `fk_reservation_user` (`user_id`),
+  ADD KEY `idx_reservation_restaurant_date` (`restaurant_id`,`reservation_time`);
+
+--
+-- Index pour la table `restaurant`
+--
+ALTER TABLE `restaurant`
+  ADD PRIMARY KEY (`restaurant_id`),
+  ADD KEY `idx_restaurant_cuisine_type` (`cuisine_type`);
+
+--
+-- Index pour la table `system_logs`
+--
+ALTER TABLE `system_logs`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `idx_system_logs_type` (`log_type`),
+  ADD KEY `idx_system_logs_created` (`created_at`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `fk_banned_by` (`banned_by`),
+  ADD KEY `idx_user_email` (`email`),
+  ADD KEY `idx_user_username` (`username`);
+
+--
+-- Index pour la table `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  ADD PRIMARY KEY (`activity_id`),
+  ADD KEY `fk_activity_log_user` (`user_id`);
+
+--
+-- Index pour la table `user_permissions`
+--
+ALTER TABLE `user_permissions`
+  ADD PRIMARY KEY (`user_id`,`permission_id`),
+  ADD KEY `permission_id` (`permission_id`);
+
+--
+-- Index pour la table `user_roles`
+--
+ALTER TABLE `user_roles`
+  ADD PRIMARY KEY (`user_role_id`),
+  ADD KEY `fk_user_roles_user` (`user_id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `admin_actions`
+--
+ALTER TABLE `admin_actions`
+  MODIFY `action_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `admin_user`
+--
+ALTER TABLE `admin_user`
+  MODIFY `admin_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `comment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT pour la table `dish`
+--
+ALTER TABLE `dish`
+  MODIFY `dish_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT pour la table `ingredient_catalog`
+--
+ALTER TABLE `ingredient_catalog`
+  MODIFY `ingredient_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT pour la table `menu`
+--
+ALTER TABLE `menu`
+  MODIFY `menu_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT pour la table `moderation_action`
+--
+ALTER TABLE `moderation_action`
+  MODIFY `action_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `oauth_account`
+--
+ALTER TABLE `oauth_account`
+  MODIFY `oauth_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `order`
+--
+ALTER TABLE `order`
+  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `order_item`
+--
+ALTER TABLE `order_item`
+  MODIFY `order_item_id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `permission_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pour la table `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `reservation_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT pour la table `restaurant`
+--
+ALTER TABLE `restaurant`
+  MODIFY `restaurant_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `system_logs`
+--
+ALTER TABLE `system_logs`
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT pour la table `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  MODIFY `activity_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT pour la table `user_roles`
+--
+ALTER TABLE `user_roles`
+  MODIFY `user_role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `admin_actions`
+--
+ALTER TABLE `admin_actions`
+  ADD CONSTRAINT `fk_admin_actions_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `admin_user`
+--
+ALTER TABLE `admin_user`
+  ADD CONSTRAINT `fk_admin_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `fk_comment_moderated_by` FOREIGN KEY (`moderated_by`) REFERENCES `admin_user` (`admin_id`),
+  ADD CONSTRAINT `fk_comment_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  ADD CONSTRAINT `fk_comment_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `dish`
+--
+ALTER TABLE `dish`
+  ADD CONSTRAINT `fk_dish_menu` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`);
+
+--
+-- Contraintes pour la table `dish_ingredient`
+--
+ALTER TABLE `dish_ingredient`
+  ADD CONSTRAINT `fk_dish_ingredient_dish` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`),
+  ADD CONSTRAINT `fk_dish_ingredient_ingredient` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient_catalog` (`ingredient_id`);
+
+--
+-- Contraintes pour la table `favorite`
+--
+ALTER TABLE `favorite`
+  ADD CONSTRAINT `fk_favorite_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  ADD CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `fk_like_moderated_by` FOREIGN KEY (`moderated_by`) REFERENCES `admin_user` (`admin_id`),
+  ADD CONSTRAINT `fk_like_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  ADD CONSTRAINT `fk_like_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `menu`
+--
+ALTER TABLE `menu`
+  ADD CONSTRAINT `fk_menu_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`);
+
+--
+-- Contraintes pour la table `moderation_action`
+--
+ALTER TABLE `moderation_action`
+  ADD CONSTRAINT `fk_moderation_action_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin_user` (`admin_id`);
+
+--
+-- Contraintes pour la table `oauth_account`
+--
+ALTER TABLE `oauth_account`
+  ADD CONSTRAINT `fk_oauth_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `fk_order_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  ADD CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD CONSTRAINT `fk_order_item_dish` FOREIGN KEY (`dish_id`) REFERENCES `dish` (`dish_id`),
+  ADD CONSTRAINT `fk_order_item_order` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`);
+
+--
+-- Contraintes pour la table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `fk_reservation_restaurant` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`restaurant_id`),
+  ADD CONSTRAINT `fk_reservation_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk_banned_by` FOREIGN KEY (`banned_by`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  ADD CONSTRAINT `fk_activity_log_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `user_permissions`
+--
+ALTER TABLE `user_permissions`
+  ADD CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`);
+
+--
+-- Contraintes pour la table `user_roles`
+--
+ALTER TABLE `user_roles`
+  ADD CONSTRAINT `fk_user_roles_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

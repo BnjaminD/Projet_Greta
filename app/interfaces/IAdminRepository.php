@@ -1,4 +1,5 @@
-<?php namespace App\Interfaces;
+<?php
+namespace App\Interfaces;
 
 interface IAdminRepository {
     public function getSystemLogs(int $limit = 100): array;

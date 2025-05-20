@@ -44,9 +44,13 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurants</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <!-- Remplacer le chemin relatif par un chemin absolu depuis la racine du serveur web -->
+    <link rel="stylesheet" href="/php/v1.02/Projet_Greta/app/assets/css/styles.css">
+    <!-- Ajouter FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
-<body>
+<!-- Ajouter une classe spécifique pour cibler les styles CSS -->
+<body class="restaurant-page">
     <?php 
     try {
         include VIEWS_PATH . '/includes/header.php';
@@ -64,7 +68,8 @@ try {
             include VIEWS_PATH . '/pages/restaurant/single.php';
         } else {
             $restaurants = $restaurantController->findAll();
-            include VIEWS_PATH . '/pages/restaurants/list.php'; 
+            // Correction ici: utiliser le fichier list.php dans le dossier restaurant au lieu de restaurants
+            include VIEWS_PATH . '/pages/restaurant/list.php';
         }
         
         echo '</div>';

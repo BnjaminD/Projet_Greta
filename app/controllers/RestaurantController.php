@@ -5,13 +5,13 @@ use App\Models\Restaurant;
 
 class RestaurantController extends AbstractController {
     private const RESTAURANT_IMAGES = [
-        'The Fancy Fork' => '../images/restaurant/fancy_fork.png',
-        'Pizza Paradise' => '../images/restaurant/pizza_paradise.png',
-        'Sushi World' => '../images/restaurant/sushi_world.png',
-        'Le Bistrot Parisien' => '../images/restaurant/bistrot_parisien.png',
-        'Taj Mahal' => '../images/restaurant/taj_mahal.png',
-        'El Tapas' => '../images/restaurant/el_tapas.png',
-        'default' => '../images/restaurant/default_restaurant.png'
+        'The Fancy Fork' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/fancy_fork.png',
+        'Pizza Paradise' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/pizza_paradise.png',
+        'Sushi World' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/sushi_world.png',
+        'Le Bistrot Parisien' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/bistrot_parisien.png',
+        'Taj Mahal' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/taj_mahal.png',
+        'El Tapas' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/el_tapas.png',
+        'default' => '/php/v1.02/Projet_Greta/app/assets/images/restaurant/default_restaurant.png'
     ];
 
     protected PDO $pdo;

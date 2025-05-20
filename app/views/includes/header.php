@@ -17,15 +17,18 @@
                     <li><a href="../pages/accueil.php">Accueil</a></li>
                     <li><a href="../pages/restaurant.php">Restaurants</a></li>
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <li><a href="../pages/mon_compte.php">Mon Compte</a></li>
-                        <li><a href="../pages/TicketView.php">Tickets</a></li>
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                            <li><a href="../pages/ticket.php">Tickets</a></li>
                             <li><a href="../pages/monitoring.php">Admin</a></li>
+                            <li><a href="../pages/Commandes.php">Monitoring</a></li>
+                            <li><a href="../pages/mon_compte.php">Mon Compte</a></li>
+                        <?php else: ?>
+                            <li><a href="../pages/Commandes.php">Mes Réservations</a></li>
                         <?php endif; ?>
+                        
                         <li><a href="../../controllers/deconnexion.php">Déconnexion</a></li>
                     <?php else: ?>
                         <li><a href="../pages/connexionV2.php">Connexion</a></li>
-                        <li><a href="../pages/inscriptionV2.php">Inscription</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
